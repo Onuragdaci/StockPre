@@ -47,6 +47,7 @@ st.plotly_chart(fig1)                                                           
 
 m=Prophet()                                                                                                            #Makine Öğrenme Algoritmasının Çağırılması
 m.fit(df_train)                                                                                                        #Eğitim Kümesinin Fit Edilmesi
+m.add_seasonality(name='daily')
 cbh = pd.tseries.offsets.CustomBusinessHour(n = 1, weekmask = 'Mon Tue Wed Thu Fri', start ='10:00', end="18:00")      #BIST Çalışma Günlerinin ve Saatlerinin Belirlenmesi
 
 startdate=data.index[-1]                                                                                               #Tahminin Yapılacağı Başlangıç Tarihinin Belirlenmesi
