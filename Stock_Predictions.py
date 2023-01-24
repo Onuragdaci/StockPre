@@ -45,7 +45,7 @@ fig1= go.Figure()                                                               
 fig1.add_trace(go.Scatter(x=data.index,y=data["close"],name="Hisse Fiyatı"))                                           #Plotly 1 Hisse Fiyat Görselinin Oluşturulması
 st.plotly_chart(fig1)                                                                                                  #Plotly 1 Görselinin Sayfaya Yüklenmesi
 
-m=Prophet()                                                                                      #Makine Öğrenme Algoritmasının Çağırılması
+m=Prophet(seasonality_mode='multiplicative')                                                        #Makine Öğrenme Algoritmasının Çağırılması
 m.fit(df_train)                                                                                                        #Eğitim Kümesinin Fit Edilmesi
 cbh = pd.tseries.offsets.CustomBusinessHour(n = 1, weekmask = 'Mon Tue Wed Thu Fri', start ='10:00', end="18:00")      #BIST Çalışma Günlerinin ve Saatlerinin Belirlenmesi
 
