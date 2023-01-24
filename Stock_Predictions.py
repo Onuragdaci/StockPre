@@ -65,16 +65,16 @@ st.plotly_chart(fig2)                                                           
 
 st.write('Günlük Tahmini Değişim')
 fig3 = plot_seasonality_plotly(m, name='daily')
-MAX_Daily=forecast['daily'].max()
-MIN_Daily=forecast['daily'].min()
+
+
 fig3.update_xaxes(rangebreaks=[dict(bounds=[18, 10], pattern="hour")])
-fig3.update_yaxes(range=(MIN_Daily-0.1,MAX_Daily+0.1))
+
 st.write(fig3)
 
 st.write('Haftalık Tahmini Değişim')
 fig4 = plot_seasonality_plotly(m, name='weekly')
-MAX_Weekly=forecast['weekly'].max()
-MIN_Weekly=forecast['weekly'].min()
+
+
 fig4.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"],pattern="day of week")])
 fig4.update_yaxes(range=(MIN_Weekly-0.1,MAX_Weekly+0.1))
 st.write(fig4)
