@@ -20,13 +20,13 @@ def Hisse_Temel_Veriler():
     return df1
 
 st.set_page_config(
-    page_title="Hisse Temel Analiz",                                            #Sayfa Başlığı
-    layout="wide",                                                              #Sayfa Formatı
+    page_title="Hisse Fiyat Tahmini",                                            #Sayfa Başlığı
+    layout="wide",                                                               #Sayfa Formatı
     initial_sidebar_state="expanded")
 
 lstAll=['1-Minute','3-Minute','5-Minute','15-Minute','30-Minute','45-Minute','1-Hour','2-Hour','3-Hour','4-Hour']      #Görsel Zaman Aralığı
-lst1=['1','3','5','15','30','45','1H','2H','3H','4H']                                                             #Alt Zaman Aralığı
-lst2=['1T','3T','5T','15T','30T','45T','1H','2H','3H','4H',]                                                        #Alt Zaman Aralığı
+lst1=['1','3','5','15','30','45','1H','2H','3H','4H']                                                                  #Alt Zaman Aralığı
+lst2=['1T','3T','5T','15T','30T','45T','1H','2H','3H','4H']                                                            #Alt Zaman Aralığı
 with st.sidebar:
     Hisse_Temel=Hisse_Temel_Veriler()                                                                                  #Hisse Başlıkları
     st.header('Hisse Arama')                                                                                           #Yan Pencere Adı
@@ -45,7 +45,7 @@ fig1= go.Figure()                                                               
 fig1.add_trace(go.Scatter(x=data.index,y=data["close"],name="Hisse Fiyatı"))                                           #Plotly 1 Hisse Fiyat Görselinin Oluşturulması
 st.plotly_chart(fig1)                                                                                                  #Plotly 1 Görselinin Sayfaya Yüklenmesi
 
-m=Prophet()                                                        #Makine Öğrenme Algoritmasının Çağırılması
+m=Prophet(daily_seasonality=20)                                                                                        #Makine Öğrenme Algoritmasının Çağırılması
 m.fit(df_train)                                                                                                        #Eğitim Kümesinin Fit Edilmesi
 cbh = pd.tseries.offsets.CustomBusinessHour(n = 1, weekmask = 'Mon Tue Wed Thu Fri', start ='10:00', end="18:00")      #BIST Çalışma Günlerinin ve Saatlerinin Belirlenmesi
 
@@ -65,10 +65,16 @@ st.plotly_chart(fig2)                                                           
 
 st.write('Günlük Tahmini Değişim')
 fig3 = plot_seasonality_plotly(m, name='daily')
+MAX_Daily=forecast['daily'].max()
+MIN_Daily=forecast['daily'].min()
 fig3.update_xaxes(rangebreaks=[dict(bounds=[18, 10], pattern="hour")])
+fig3.update_yaxes(range=(MIN_Daily-0.1,MAX_Daily+0.1))
 st.write(fig3)
-st.write('Haftalık Tahmini Değişim')
 
+st.write('Haftalık Tahmini Değişim')
 fig4 = plot_seasonality_plotly(m, name='weekly')
+MAX_Weekly=forecast['weekly'].max()
+MIN_Weekly=forecast['weekly'].min()
 fig4.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"],pattern="day of week")])
+fig4.update_yaxes(range=(MIN_Weekly-0.1,MAX_Weekly+0.1))
 st.write(fig4)
