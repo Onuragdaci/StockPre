@@ -37,8 +37,7 @@ with st.sidebar:
     st.header('Hisse Arama')
     Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
     Hisse_Adı=[Hisse_Adı]
-def Yıllıklandirilmiş_Veriler(Hisse):
-    print(Hisse)
+
     options = webdriver.ChromeOptions()
     options.add_argument('--disable-gpu')
     options.add_argument('--headless')
@@ -50,6 +49,9 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+  
+def Yıllıklandirilmiş_Veriler(Hisse):
+    print(Hisse)
     driver.implicitly_wait(5)
     driver.get("https://halkyatirim.com.tr/skorkart/"+Hisse)
     driver.implicitly_wait(20)
@@ -73,7 +75,7 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     Carpanlar = Carpanlar.iloc[:-5]
     Carpanlar.replace('-', np.nan, inplace=True)
     Carpanlar.replace('a.d.', np.nan, inplace=True)
-    driver.quit()
+    driver.close()
 
 
     return L01, L02,L03,L04,L05,Carpanlar
