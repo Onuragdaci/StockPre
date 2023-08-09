@@ -209,4 +209,5 @@ Tum_Degerleme=pd.DataFrame(columns=['Hisse Adı','Sektör','Dönem','Fiyat','İ�
 Tum_Carpanlar['İçsel Değer']=Tum_Carpanlar[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1,skipna=True)
 Tum_Carpanlar['Marj']=((Tum_Carpanlar['İçsel Değer']-Tum_Carpanlar['Fiyat'])/(Tum_Carpanlar['Fiyat']+0.001))*100
 Tum_Carpanlar=Tum_Carpanlar.T
+Tum_Carpanlar=Tum_Carpanlar.round(decimal=2)
 st.dataframe(Tum_Carpanlar,use_container_width=True)
