@@ -1,7 +1,6 @@
 # @title
 Stock=input('Hisse_Adını_Yazın... : ')
 Hisse_Adı=[str(Stock)]
-!pip install selenium
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
