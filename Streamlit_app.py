@@ -13,6 +13,7 @@ import streamlit as st
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 import warnings
 warnings.filterwarnings("ignore")
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def Hisse_Temel_Veriler():
