@@ -1,6 +1,3 @@
-# @title
-Stock=input('Hisse_Adını_Yazın... : ')
-Hisse_Adı=[str(Stock)]
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -15,6 +12,16 @@ from urllib import request
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 import warnings
 warnings.filterwarnings("ignore")
+
+st.set_page_config(
+    page_title="Hisse Değerleme",
+    layout="wide"
+    initial_sidebar_state="expanded")
+
+with st.sidebar:
+    Hisse_Ozet=Hisse_Temel_Veriler()
+    st.header('Hisse Arama')
+    Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
 
 def Hisse_Temel_Veriler():
     url1="https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-Ve-Oranlar.aspx#page-1"
@@ -68,11 +75,6 @@ def Yıllıklandirilmiş_Veriler(Hisse):
 
     return L01, L02,L03,L04,L05,Carpanlar
 
-
-
-
-
-Hisse_Ozet=Hisse_Temel_Veriler()
 Hisse_Ozet.replace('A/D', np.nan, inplace=True)                                           #Anlamsız Verileri NA ya çevir
 
 Ortalama_Basliklar=['Hisse Adı','Sektör','Dönem','Piyasa Değeri','Ödenmiş Sermaye','Öz Sermaye','YILLIK KAR','YILLIK SATIŞ','Fiyat',
