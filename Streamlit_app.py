@@ -15,7 +15,6 @@ import warnings
 warnings.filterwarnings("ignore")
 from webdriver_manager.chrome import ChromeDriverManager
 
-
 def Hisse_Temel_Veriler():
     url1="https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-Ve-Oranlar.aspx#page-1"
     context = ssl._create_unverified_context()
@@ -27,8 +26,6 @@ def Hisse_Temel_Veriler():
     df2['Sektör']=df1[['Sektör']]
     return df2
 
-hide_github_icon ="""#GithubIcon {visibilty: hidden;}"""
-st.markdown(hide_github_icon,unsafe_allow_html=True)
 st.set_page_config(
     page_title="Hisse Değerleme",
     layout="wide",
