@@ -35,7 +35,7 @@ with st.sidebar:
     Hisse_Ozet=Hisse_Temel_Veriler()
     st.header('Hisse Arama')
     Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
-
+    Hisse_Adı=[Hisse_Adı]
 def Yıllıklandirilmiş_Veriler(Hisse):
     print(Hisse)
     options = webdriver.ChromeOptions()
