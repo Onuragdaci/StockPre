@@ -208,4 +208,4 @@ Tum_Carpanlar['İçsel Değer']=(Tum_Carpanlar['Degerleme 1']+Tum_Carpanlar['Deg
 Tum_Carpanlar['Marj']=((Tum_Carpanlar['İçsel Değer']-Tum_Carpanlar['Fiyat'])/(Tum_Carpanlar['Fiyat']+0.001))*100
 
 Tum_Carpanlar=Tum_Carpanlar.T
-print(Tum_Carpanlar.to_string())
+st.dataframe(Tum_Carpanlar,use_container_width=True)
