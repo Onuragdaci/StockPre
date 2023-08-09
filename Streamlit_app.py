@@ -183,7 +183,7 @@ Tum_Carpanlar['Degerleme 3']=((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'
 Tum_Carpanlar['Degerleme 3'] = dTum_Carpanlar['Degerleme 3'].apply(lambda x: round(x, 2))
 
 #Değerleme 4 = Şirket Sermayesi Kadar Kâr Elde Ederse 10 TL değeri vardır.
-Tum_Carpanlar['Degerleme 4']=(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Ödenmiş Sermaye'])*10,2)
+Tum_Carpanlar['Degerleme 4']=(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Ödenmiş Sermaye'])*10
 Tum_Carpanlar['Degerleme 4'] = dTum_Carpanlar['Degerleme 4'].apply(lambda x: round(x, 2))
 
 #Değerleme 5 = PD/DD Öz Sermayenin 10 Katı olmalı. (Öz Sermaye Kârlılığı x10/(PD/DD))xHisse_Fiyatı
