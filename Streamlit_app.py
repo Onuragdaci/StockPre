@@ -151,11 +151,11 @@ for i in range(len(Hisse_Adı)):
     Yıllık_Satıs=LL05
 
 
-    Gelecek_FK=PiyDeg/(Yıllık_Kar+0.0001)
-    Sermaye_Çarpanı=Yıllık_Kar/ÖdSer                                #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
-    Potansiyel_PD=Yıllık_Kar*7+ÖzSer*0.5                            #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
-    NetKarMarjı=(Yıllık_Kar/(Yıllık_Satıs+0.0001))                  #Net Kâr Marjı
-    PD_NS=PiyDeg/(Yıllık_Satıs +0.0001)                             #Piyasa Değeri / Net Satışlar
+    Gelecek_FK=round(PiyDeg/(Yıllık_Kar+0.0001),2)
+    Sermaye_Çarpanı=round(Yıllık_Kar/ÖdSer,2)                                #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
+    Potansiyel_PD=round(Yıllık_Kar*7+ÖzSer*0.5,2)                            #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
+    NetKarMarjı=round((Yıllık_Kar/(Yıllık_Satıs+0.0001)),2)                  #Net Kâr Marjı
+    PD_NS=round(PiyDeg/(Yıllık_Satıs +0.0001),2)                             #Piyasa Değeri / Net Satışlar
 
 
     Carpanlar=[Hisse_Adı[i],Sektor,Hisse_Dönem,PiyDeg,ÖdSer,ÖzSer,Yıllık_Kar,Yıllık_Satıs,Hisse_Fiyat,
