@@ -165,7 +165,8 @@ for i in range(len(Hisse_Adı)):
     Carpanlar=pd.DataFrame([Carpanlar],columns=Ortalama_Basliklar)                            #Tüm Çarpanların Birleştirilmesi
     Tum_Carpanlar=Tum_Carpanlar.append(Carpanlar)
 
-
+Tum_Carpanlar['GELECEK FK'] = Tum_Carpanlar['GELECEK FK'].apply(lambda x: round(x, 2))
+Tum_Carpanlar['PD/NS'] = Tum_Carpanlar['PD/NS'].apply(lambda x: round(x, 2))
 
 #Değerleme 1 = Hisse_Fiyatıx(Sektör_FK/Şirket_FK) ve Hisse_Fiyatıx(Sektör_PDDD/Şirket_PDDD) 'nin ortalaması
 Tum_Carpanlar['Degerleme 1']=(Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR F/K']/Tum_Carpanlar['F/K'])+Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR PD/DD']/Tum_Carpanlar['PD/DD']))/2
@@ -211,5 +212,6 @@ Tum_Carpanlar['Degerleme 10'] = Tum_Carpanlar['Degerleme 10'].apply(lambda x: ro
 
 Tum_Carpanlar['İçsel Değer']=Tum_Carpanlar[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1,skipna=True)
 Tum_Carpanlar['Marj']=((Tum_Carpanlar['İçsel Değer']-Tum_Carpanlar['Fiyat'])/(Tum_Carpanlar['Fiyat']+0.001))*100
+Tum_Carpanlar['Marj'] = Tum_Carpanlar['Marj'].apply(lambda x: round(x, 2))
 Tum_Carpanlar=Tum_Carpanlar.T
 st.dataframe(Tum_Carpanlar,use_container_width=True)
