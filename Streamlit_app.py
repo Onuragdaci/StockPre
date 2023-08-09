@@ -90,9 +90,6 @@ Ortalama_Basliklar=['Hisse Adı','Sektör','Dönem','Piyasa Değeri','Ödenmiş 
 
 Tum_Carpanlar=pd.DataFrame(columns=Ortalama_Basliklar)             #Tüm Çarpan Ortalamalarının Birleştirilmesi
 
-
-
-
 for i in range(len(Hisse_Adı)):
 
     Hisse_Fiyat=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Kapanış (TL)'].iloc[0]     #Hissenin Kapanış Fiyatı
@@ -153,7 +150,7 @@ for i in range(len(Hisse_Adı)):
 
     Gelecek_FK=PiyDeg/(Yıllık_Kar+0.0001)
     Sermaye_Çarpanı=Yıllık_Kar/ÖdSer                               #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
-    Potansiyel_PD=Yıllık_Kar*7+ÖzSer*0.5,                          #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
+    Potansiyel_PD=Yıllık_Kar*7+ÖzSer*0.5                           #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
     NetKarMarjı=Yıllık_Kar/(Yıllık_Satıs+0.0001)                   #Net Kâr Marjı
     PD_NS=PiyDeg/(Yıllık_Satıs +0.0001)                            #Piyasa Değeri / Net Satışlar
 
