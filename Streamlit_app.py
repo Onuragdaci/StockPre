@@ -49,7 +49,7 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=option)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.implicitly_wait(5)
     driver.get("https://halkyatirim.com.tr/skorkart/"+Hisse)
     driver.implicitly_wait(20)
