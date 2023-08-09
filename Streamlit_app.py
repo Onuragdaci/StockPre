@@ -27,6 +27,8 @@ def Hisse_Temel_Veriler():
     df2['Sektör']=df1[['Sektör']]
     return df2
 
+hide_github_icon ="""#GithubIcon {visibilty: hidden;}"""
+st.markdown(hide_github_icon,unsafe_allow_html=True)
 st.set_page_config(
     page_title="Hisse Değerleme",
     layout="wide",
