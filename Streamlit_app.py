@@ -151,11 +151,11 @@ for i in range(len(Hisse_Adı)):
     Yıllık_Satıs=LL05
 
 
-    Gelecek_FK=round(PiyDeg/(Yıllık_Kar+0.0001),2)
-    Sermaye_Çarpanı=round(Yıllık_Kar/ÖdSer,2)                                #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
-    Potansiyel_PD=round(Yıllık_Kar*7+ÖzSer*0.5,2)                            #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
-    NetKarMarjı=round((Yıllık_Kar/(Yıllık_Satıs+0.0001)),2)                  #Net Kâr Marjı
-    PD_NS=round(PiyDeg/(Yıllık_Satıs +0.0001),2)                             #Piyasa Değeri / Net Satışlar
+    Gelecek_FK=PiyDeg/(Yıllık_Kar+0.0001)
+    Sermaye_Çarpanı=Yıllık_Kar/ÖdSer                               #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
+    Potansiyel_PD=Yıllık_Kar*7+ÖzSer*0.5,                          #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
+    NetKarMarjı=Yıllık_Kar/(Yıllık_Satıs+0.0001)                   #Net Kâr Marjı
+    PD_NS=PiyDeg/(Yıllık_Satıs +0.0001)                            #Piyasa Değeri / Net Satışlar
 
 
     Carpanlar=[Hisse_Adı[i],Sektor,Hisse_Dönem,PiyDeg,ÖdSer,ÖzSer,Yıllık_Kar,Yıllık_Satıs,Hisse_Fiyat,
@@ -171,34 +171,44 @@ for i in range(len(Hisse_Adı)):
 
 
 #Değerleme 1 = Hisse_Fiyatıx(Sektör_FK/Şirket_FK) ve Hisse_Fiyatıx(Sektör_PDDD/Şirket_PDDD) 'nin ortalaması
-Tum_Carpanlar['Degerleme 1']=round((Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR F/K']/Tum_Carpanlar['F/K'])+Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR PD/DD']/Tum_Carpanlar['PD/DD']))/2,2)
+Tum_Carpanlar['Degerleme 1']=(Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR F/K']/Tum_Carpanlar['F/K'])+Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR PD/DD']/Tum_Carpanlar['PD/DD']))/2
+Tum_Carpanlar['Degerleme 1'] = dTum_Carpanlar['Degerleme 1'].apply(lambda x: round(x, 2))
 
 #Değerleme 2 = (Hisse Fiyatı/Şirket_FK)xSektör_FK ve (Hisse Fiyatı/Şirket_FK)xBist_FK 'nın ortalaması
-Tum_Carpanlar['Degerleme 2']=round(((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['SEKTÖR F/K']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['BIST F/K'])/2,2)
+Tum_Carpanlar['Degerleme 2']=((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['SEKTÖR F/K']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['BIST F/K'])/2
+Tum_Carpanlar['Degerleme 2'] = dTum_Carpanlar['Degerleme 2'].apply(lambda x: round(x, 2))
 
 #Değerleme 3 = Gelecek_FK=(Piyasa Değeri / Yıllıklandırılmış Net Kâr) olmak üzere  (Hisse Fiyatı/Gelecek FK)xBist_FK ve (Hisse Fiyatı/Gelecek FK)xSektör_FK 'nın ortalaması
-Tum_Carpanlar['Degerleme 3']=(round(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'])*Tum_Carpanlar['SEKTÖR F/K']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'])*Tum_Carpanlar['BIST F/K'])/2,2)
+Tum_Carpanlar['Degerleme 3']=((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'])*Tum_Carpanlar['SEKTÖR F/K']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'])*Tum_Carpanlar['BIST F/K'])/2
+Tum_Carpanlar['Degerleme 3'] = dTum_Carpanlar['Degerleme 3'].apply(lambda x: round(x, 2))
 
 #Değerleme 4 = Şirket Sermayesi Kadar Kâr Elde Ederse 10 TL değeri vardır.
-Tum_Carpanlar['Degerleme 4']=round((Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Ödenmiş Sermaye'])*10,2)
+Tum_Carpanlar['Degerleme 4']=(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Ödenmiş Sermaye'])*10,2)
+Tum_Carpanlar['Degerleme 4'] = dTum_Carpanlar['Degerleme 4'].apply(lambda x: round(x, 2))
 
 #Değerleme 5 = PD/DD Öz Sermayenin 10 Katı olmalı. (Öz Sermaye Kârlılığı x10/(PD/DD))xHisse_Fiyatı
-Tum_Carpanlar['Degerleme 5']=round((10*(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Öz Sermaye'])/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['Fiyat'],2)
+Tum_Carpanlar['Degerleme 5']=(10*(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Öz Sermaye'])/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['Fiyat']
+Tum_Carpanlar['Degerleme 5'] = dTum_Carpanlar['Degerleme 5'].apply(lambda x: round(x, 2))
 
 #Değerleme 6 = PD/DD Öz Sermayenin 10 Katı olmalı. (Öz Sermaye Kârlılığı x10/(PD/DD))xHisse_Fiyatı
-Tum_Carpanlar['Degerleme 6']=round(((Tum_Carpanlar['POTASİYEL PD'])/Tum_Carpanlar['Ödenmiş Sermaye']),2)
+Tum_Carpanlar['Degerleme 6']=((Tum_Carpanlar['POTASİYEL PD'])/Tum_Carpanlar['Ödenmiş Sermaye'])
+Tum_Carpanlar['Degerleme 6'] = dTum_Carpanlar['Degerleme 6'].apply(lambda x: round(x, 2))
 
 #Değerleme 7 = 100*(Net Kar Marjı / PD_NS )*Hisse_Fiyatı
-Tum_Carpanlar['Degerleme 7']=round(100*(Tum_Carpanlar['NET KAR MARJI']/Tum_Carpanlar['PD/NS'])*Tum_Carpanlar['Fiyat'],2)
+Tum_Carpanlar['Degerleme 7']=100*(Tum_Carpanlar['NET KAR MARJI']/Tum_Carpanlar['PD/NS'])*Tum_Carpanlar['Fiyat']
+Tum_Carpanlar['Degerleme 7'] = dTum_Carpanlar['Degerleme 7'].apply(lambda x: round(x, 2))
 
 #Değerleme 8 = Hisse_Fiyatı/(Sirket_PDDD)*Sektör_PDDD ve Hisse_Fiyatı/(Sirket_PDDD)*Bist_PDDD
-Tum_Carpanlar['Degerleme 8']=round((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['SEKTÖR PD/DD']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['PD/DD']*Tum_Carpanlar['BIST PD/DD'])/2,2)
+Tum_Carpanlar['Degerleme 8']=(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['SEKTÖR PD/DD']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['PD/DD']*Tum_Carpanlar['BIST PD/DD'])/2
+Tum_Carpanlar['Degerleme 8'] = dTum_Carpanlar['Degerleme 8'].apply(lambda x: round(x, 2))
 
 #Değerleme 9 = Hisse_Fİyatı/(Şirket_FK)*Tarihsel_FK
-Tum_Carpanlar['Degerleme 9']=round((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['Tarihsel F/K'],2)
+Tum_Carpanlar['Degerleme 9']=(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['Tarihsel F/K']
+Tum_Carpanlar['Degerleme 9'] = dTum_Carpanlar['Degerleme 9'].apply(lambda x: round(x, 2))
 
 #Değerleme 10 =Öz Sermayenin 3 yada 4 katı kadar piyasa değeri olması
-Tum_Carpanlar['Degerleme 10']=round(((3*Tum_Carpanlar['Piyasa Değeri'])/Tum_Carpanlar['PD/DD'])/Tum_Carpanlar['Ödenmiş Sermaye']2)
+Tum_Carpanlar['Degerleme 10']=((3*Tum_Carpanlar['Piyasa Değeri'])/Tum_Carpanlar['PD/DD'])/Tum_Carpanlar['Ödenmiş Sermaye']
+Tum_Carpanlar['Degerleme 10'] = dTum_Carpanlar['Degerleme 10'].apply(lambda x: round(x, 2))
 
 
 Tum_Degerleme=pd.DataFrame(columns=['Hisse Adı','Sektör','Dönem','Fiyat','İçsel Değer','Marj'])
