@@ -191,7 +191,7 @@ Tum_Carpanlar['Degerleme 5']=(10*(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Öz
 Tum_Carpanlar['Degerleme 5'] = Tum_Carpanlar['Degerleme 5'].apply(lambda x: round(x, 2))
 
 #Değerleme 6 = PD/DD Öz Sermayenin 10 Katı olmalı. (Öz Sermaye Kârlılığı x10/(PD/DD))xHisse_Fiyatı
-Tum_Carpanlar['Degerleme 6']=((Tum_Carpanlar['POTASİYEL PD'])/Tum_Carpanlar['Ödenmiş Sermaye'])
+Tum_Carpanlar['Degerleme 6']=(Tum_Carpanlar['POTASİYEL PD'])/Tum_Carpanlar['Ödenmiş Sermaye']
 Tum_Carpanlar['Degerleme 6'] = Tum_Carpanlar['Degerleme 6'].apply(lambda x: round(x, 2))
 
 #Değerleme 7 = 100*(Net Kar Marjı / PD_NS )*Hisse_Fiyatı
