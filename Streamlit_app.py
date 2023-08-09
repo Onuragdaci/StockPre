@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import ssl
 from urllib import request
+import streamlit as st
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 import warnings
 warnings.filterwarnings("ignore")
