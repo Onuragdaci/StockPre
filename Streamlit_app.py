@@ -186,7 +186,10 @@ Tum_Carpanlar['Degerleme 4']=(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Ödenmi
 Tum_Carpanlar['Degerleme 5']=(10*(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Öz Sermaye'])/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['Fiyat']
 
 #Değerleme 6 = Potansiyel PD/Özsermaye
-Tum_Carpanlar['Degerleme 6']=((Tum_Carpanlar['POTASİYEL PD'])/1)
+Tum_Carpanlar['Degerleme 6']=1/1
+#Tum_Carpanlar['Ödenmiş Sermaye']
+print(Tum_Carpanlar['POTASİYEL PD'])
+print(Tum_Carpanlar['Ödenmiş Sermaye'])
 
 #Değerleme 7 = 100*(Net Kar Marjı / PD_NS )*Hisse_Fiyatı
 Tum_Carpanlar['Degerleme 7']=100*(Tum_Carpanlar['NET KAR MARJI']/Tum_Carpanlar['PD/NS'])*Tum_Carpanlar['Fiyat']
