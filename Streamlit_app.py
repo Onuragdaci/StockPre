@@ -204,8 +204,7 @@ Tum_Carpanlar['Degerleme 10']=((3*Tum_Carpanlar['Piyasa Değeri'])/Tum_Carpanlar
 
 Tum_Degerleme=pd.DataFrame(columns=['Hisse Adı','Sektör','Dönem','Fiyat','İçsel Değer','Marj'])
 
-Tum_Carpanlar['İçsel Değer']=(Tum_Carpanlar['Degerleme 1']+Tum_Carpanlar['Degerleme 2']+Tum_Carpanlar['Degerleme 3']+Tum_Carpanlar['Degerleme 4']+Tum_Carpanlar['Degerleme 5']+Tum_Carpanlar['Degerleme 6']+Tum_Carpanlar['Degerleme 7']+Tum_Carpanlar['Degerleme 8']+Tum_Carpanlar['Degerleme 9']+Tum_Carpanlar['Degerleme 10'])/10
+Tum_Carpanlar['İçsel Değer']=Tum_Carpanlar[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1)
 Tum_Carpanlar['Marj']=((Tum_Carpanlar['İçsel Değer']-Tum_Carpanlar['Fiyat'])/(Tum_Carpanlar['Fiyat']+0.001))*100
-
 Tum_Carpanlar=Tum_Carpanlar.T
 st.dataframe(Tum_Carpanlar,use_container_width=True)
