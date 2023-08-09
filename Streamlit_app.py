@@ -14,15 +14,6 @@ locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 import warnings
 warnings.filterwarnings("ignore")
 
-st.set_page_config(
-    page_title="Hisse Değerleme",
-    layout="wide",
-    initial_sidebar_state="expanded")
-
-with st.sidebar:
-    Hisse_Ozet=Hisse_Temel_Veriler()
-    st.header('Hisse Arama')
-    Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
 
 def Hisse_Temel_Veriler():
     url1="https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-Ve-Oranlar.aspx#page-1"
@@ -34,6 +25,16 @@ def Hisse_Temel_Veriler():
     df2=df[6]
     df2['Sektör']=df1[['Sektör']]
     return df2
+
+st.set_page_config(
+    page_title="Hisse Değerleme",
+    layout="wide",
+    initial_sidebar_state="expanded")
+
+with st.sidebar:
+    Hisse_Ozet=Hisse_Temel_Veriler()
+    st.header('Hisse Arama')
+    Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
 
 def Yıllıklandirilmiş_Veriler(Hisse):
     print(Hisse)
