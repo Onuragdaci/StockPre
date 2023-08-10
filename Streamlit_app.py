@@ -29,21 +29,8 @@ def Hisse_Temel_Veriler():
 st.set_page_config(
     page_title="Hisse Değerleme",
     layout="wide",
-    initial_sidebar_state="expanded")
-
-
-st.markdown(
-    """
-    <style>
-    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
-    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
-    .viewerBadge_text__1JaDK {
-        display: none;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    initial_sidebar_state="expand")
+    
 
 with st.sidebar:
     Hisse_Ozet=Hisse_Temel_Veriler()
