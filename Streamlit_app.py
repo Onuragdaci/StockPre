@@ -166,6 +166,8 @@ for i in range(len(Hisse_Adı)):
     Carpanlar=pd.DataFrame([Carpanlar],columns=Ortalama_Basliklar)                            #Tüm Çarpanların Birleştirilmesi
     Tum_Carpanlar=Tum_Carpanlar.append(Carpanlar)
 
+
+Tum_Carpanlar['POTASİYEL PD'] = Tum_Carpanlar['POTASİYEL PD'].apply(lambda x: round(x, 2))
 Tum_Carpanlar['NET KAR MARJI'] = Tum_Carpanlar['NET KAR MARJI'].apply(lambda x: round(x, 2))
 Tum_Carpanlar['GELECEK FK'] = Tum_Carpanlar['GELECEK FK'].apply(lambda x: round(x, 2))
 Tum_Carpanlar['PD/NS'] = Tum_Carpanlar['PD/NS'].apply(lambda x: round(x, 2))
