@@ -31,6 +31,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded")
 
+hide_icon="""#MainMenu {visibility: hidden;}"""
+st.markdown(hide_icon, unsafe_allow_html=True)
 with st.sidebar:
     Hisse_Ozet=Hisse_Temel_Veriler()
     st.header('Hisse Arama')
