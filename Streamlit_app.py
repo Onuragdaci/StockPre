@@ -27,9 +27,9 @@ def Hisse_Temel_Veriler():
     return df2
 
 st.set_page_config(
-    page_title="Hisse Değerleme",
+    page_title="Hisse Temel Analiz",
     layout="wide",
-    initial_sidebar_state="expand")
+    initial_sidebar_state="expanded")
     
 
 with st.sidebar:
