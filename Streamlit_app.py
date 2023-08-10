@@ -195,7 +195,7 @@ Tum_Carpanlar['Degerleme 6']=Tum_Carpanlar['POTASİYEL PD']/Tum_Carpanlar['Öden
 Tum_Carpanlar['Degerleme 6'] = Tum_Carpanlar['Degerleme 6'].apply(lambda x: round(x, 2))
 
 #Değerleme 7 = 100*(Net Kar Marjı / PD_NS )*Hisse_Fiyatı
-Tum_Carpanlar['Degerleme 7']=100*(Tum_Carpanlar['NET KAR MARJI']/Tum_Carpanlar['PD/NS'])*Tum_Carpanlar['Fiyat']
+Tum_Carpanlar['Degerleme 7']=10*(Tum_Carpanlar['NET KAR MARJI']/Tum_Carpanlar['PD/NS'])*Tum_Carpanlar['Fiyat']
 Tum_Carpanlar['Degerleme 7'] = Tum_Carpanlar['Degerleme 7'].apply(lambda x: round(x, 2))
 
 
