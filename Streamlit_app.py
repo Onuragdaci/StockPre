@@ -110,7 +110,7 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     Y_NetSat=round(Y_NetSat,2)
 
 
-    return L01, L02,L03,L04,L05,Carpanlar
+    return L01, L02,L03,L04,L05,Carpanlar,NetKar,NetSat
 
 Hisse_Ozet.replace('A/D', np.nan, inplace=True)                                           #Anlamsız Verileri NA ya çevir
 
@@ -158,7 +158,7 @@ for i in range(len(Hisse_Adı)):
     SEKTOR_FD_FAV=round(np.nanmean(SEKTOR_FD_FAV),3)                                          #Sektör FD/FAVÖK Ortalaması
     SEKTOR_FD_SAT=round(np.nanmean(SEKTOR_FD_SAT),3)                                          #Sektör FD/SAT Ortalaması
 
-    LL01, LL02,LL03,LL04,LL05,Tarihsel_Carpanlar=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
+    LL01,LL01,LL02,LL03,LL04,LL05,Tarihsel_Carpanlar,Tah_NetKar,Tah_NetSat=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
 
     TarFK=Tarihsel_Carpanlar['F/K'].to_numpy(dtype='float')
     TarFK=round(np.nanmean(TarFK),2)
@@ -172,14 +172,11 @@ for i in range(len(Hisse_Adı)):
     TarFD_SAT=Tarihsel_Carpanlar['FD/Satışlar'].to_numpy(dtype='float')
     TarFD_SAT=round(np.nanmean(TarFD_SAT),2)
 
-
-
     PiyDeg=LL01
     ÖdSer=LL02
     ÖzSer=LL03
     Yıllık_Kar=LL04
     Yıllık_Satıs=LL05
-
 
     Gelecek_FK=PiyDeg/(Yıllık_Kar+0.0001)
     Sermaye_Çarpanı=Yıllık_Kar/ÖdSer                               #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
