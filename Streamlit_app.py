@@ -106,11 +106,11 @@ def Yıllıklandirilmiş_Veriler(Hisse):
         Y_NetKar = (NetKar[0]+NetKar[1]+NetKar[2]+NetKar[3])
         Y_NetSat = (NetSat[0]+NetSat[1]+NetSat[2]+NetSat[3])
 
-    Y_NetKar=round(Y_NetKar,2)
-    Y_NetSat=round(Y_NetSat,2)
+    NetKar=round(Y_NetKar,2)
+    NetSat=round(Y_NetSat,2)
 
 
-    return L01, L02,L03,L04,L05,Carpanlar,NetKar,NetSat
+    return L01,L02,L03,L04,L05,Carpanlar,NetKar,NetSat
 
 Hisse_Ozet.replace('A/D', np.nan, inplace=True)                                           #Anlamsız Verileri NA ya çevir
 
