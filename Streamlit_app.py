@@ -37,7 +37,6 @@ with st.sidebar:
     Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
     Hisse_Adı=[Hisse_Adı]
 
-col1, col2 = st.columns(2)
     options = webdriver.ChromeOptions()
     options.add_argument('--disable-gpu')
     options.add_argument('--headless')
@@ -316,6 +315,8 @@ Tum_Carpanlar_2['İçsel Değer'] = Tum_Carpanlar_2['İçsel Değer'].apply(lamb
 Tum_Carpanlar_2['Marj']=((Tum_Carpanlar_2['İçsel Değer']-Tum_Carpanlar_2['Fiyat'])/(Tum_Carpanlar_2['Fiyat']+0.001))*100
 Tum_Carpanlar_2['Marj'] = Tum_Carpanlar_2['Marj'].apply(lambda x: round(x, 2))
 Tum_Carpanlar_2=Tum_Carpanlar_2.T
+
+col1, col2 = st.columns(2)
 col1.subheader('Yıllıklandırılmış Verilere Göre')
 col1.dataframe(Tum_Carpanlar,use_container_width=True,height=2000 )
 
