@@ -317,8 +317,9 @@ Tum_Carpanlar_2['Marj'] = Tum_Carpanlar_2['Marj'].apply(lambda x: round(x, 2))
 Tum_Carpanlar_2=Tum_Carpanlar_2.T
 print(Tum_Carpanlar_2)
 col1, col2 = st.columns(2)
-col1.subheader('Yıllıklandırılmış Verilere Göre')
-col1.dataframe(Tum_Carpanlar,use_container_width=True,height=2000)
-
-col2.subheader('Tahmini Yıl Sonu Verilerine Göre')
-col2.dataframe(Tum_Carpanlar_2,use_container_width=True,height=2000)
+with col1:
+    st.subheader('Yıllıklandırılmış Verilere Göre')
+    st.dataframe(Tum_Carpanlar,use_container_width=True,height=2000)
+with col2:
+   st.subheader('Tahmini Yıl Sonu Verilerine Göre')
+   st.dataframe(Tum_Carpanlar_2,use_container_width=True,height=2000)
