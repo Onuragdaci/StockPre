@@ -176,7 +176,7 @@ for i in range(len(Hisse_Adı)):
     ÖdSer=LL02
     ÖzSer=LL03
     Yıllık_Kar=LL04
-    Tah_Yıllık_Kar=Tah_Net_Kar
+    Tah_Yıllık_Kar=Tah_NetKar
     
     Yıllık_Satıs=LL05
     Tah_Yıllık_Satıs=Tah_NetSat
