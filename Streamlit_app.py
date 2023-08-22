@@ -83,7 +83,7 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     Finansallar.replace('-', np.nan, inplace=True)
     Finansallar.replace('a.d.', np.nan, inplace=True)
 
-    driver.quit()
+    
 
     NetKar=Finansallar['Net Kâr Çeyrek (Mln TL)'].to_numpy(dtype='float')                       #Çeyreklik Net Kâr Değerleri
     NetSat=Finansallar['Net Satışlar Çeyrek (Mln TL)'].to_numpy(dtype='float')                  #Çeyreklik Net Satışlar Değerleri
@@ -130,18 +130,23 @@ Ortalama_Basliklar_2=['Hisse Adı','Sektör','Dönem','Piyasa Değeri','Ödenmi�
 Tum_Carpanlar=pd.DataFrame(columns=Ortalama_Basliklar)             #Tüm Çarpan Ortalamalarının Birleştirilmesi
 Tum_Carpanlar_2=pd.DataFrame(columns=Ortalama_Basliklar_2)         #Tüm Çarpan Ortalamalarının Birleştirilmesi
 for i in range(len(Hisse_Adı)):
-
+    LL01,LL02,LL03,LL04,LL05,Tarihsel_Carpanlar,Tah_NetKar,Tah_NetSat=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
     Hisse_Fiyat=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Kapanış (TL)'].iloc[0]     #Hissenin Kapanış Fiyatı
     Hisse_Dönem=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Son Dönem'].iloc[0]        #Hissenin Bilanço Dönemi
 
     #Hisse Piyasa Çarpanları
     Hisse_Finansallar=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Kod'].iloc[0]        #Hissenin Bulunması
     Filtre2=Hisse_Ozet[Hisse_Ozet['Kod'].str.contains(Hisse_Finansallar)]                     #Hisse Bazlı Filtreleme
-    HISSE_FKX=Filtre2['F/K'].to_numpy(dtype='float')[0]                                       #Hisse F/K Oranı
-    HISSE_PDDDX=Filtre2['PD/DD'].to_numpy(dtype='float')[0]                                   #Hisse PD/DD Oranı
-    HISSE_FD_FAV=Filtre2['FD/FAVÖK'].to_numpy(dtype='float')[0]                               #Hisse FD/FAVÖK Oranı
-    HISSE_FD_SAT=Filtre2['FD/Satışlar'].to_numpy(dtype='float')[0]                            #Hisse FD/SAT Oranı
+    
+    HISSE_FKX=driver.find_element(By.XPATH,'//*[@id="TBLTEMELANALIZ"]/tbody/tr[1]/td[2]').text                    #Hisse F/K oranı
+    HISSE_PDDDX=driver.find_element(By.XPATH,'//*[@id="TBLTEMELANALIZ"]/tbody/tr[2]/td[2]').text                  #Hisse PD/DD oranı
+    HISSE_FD_FAV=driver.find_element(By.XPATH,'//*[@id="TBLTEMELANALIZ"]/tbody/tr[3]/td[2]').text                 #Hisse FD/FAVÖK Oranı
 
+    HISSE_FKX=locale.atof(HISSE_FKX)
+    HISSE_PDDDX=locale.atof(HISSE_PDDDX)
+    HISSE_FD_FAV=locale.atof(HISSE_FD_FAV)
+    
+    driver.quit()
     #BIST Piyasa Çarpanları Ortalaması
     BIST_FKX=Hisse_Ozet['F/K'].to_numpy(dtype='float')                                        #BIST F/K Oranı
     BIST_PDDDX=Hisse_Ozet['PD/DD'].to_numpy(dtype='float')                                    #BIST PD/DD Oranı
@@ -164,7 +169,7 @@ for i in range(len(Hisse_Adı)):
     SEKTOR_FD_FAV=round(np.nanmean(SEKTOR_FD_FAV),3)                                          #Sektör FD/FAVÖK Ortalaması
     SEKTOR_FD_SAT=round(np.nanmean(SEKTOR_FD_SAT),3)                                          #Sektör FD/SAT Ortalaması
 
-    LL01,LL02,LL03,LL04,LL05,Tarihsel_Carpanlar,Tah_NetKar,Tah_NetSat=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
+    
 
     TarFK=Tarihsel_Carpanlar['F/K'].to_numpy(dtype='float')
     TarFK=round(np.nanmean(TarFK),2)
