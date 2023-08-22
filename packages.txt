@@ -1,2 +1,3 @@
 locales-all
 chromium
+chromium-driver
