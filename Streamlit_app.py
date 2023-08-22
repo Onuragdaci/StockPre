@@ -128,7 +128,7 @@ Ortalama_Basliklar_2=['Hisse Adı','Sektör','Dönem','Piyasa Değeri','Ödenmi�
                     'SEKTÖR F/K','SEKTÖR PD/DD','SEKTÖR FD/FAVÖK','SEKTÖR FD/SATIŞLAR']
 
 Tum_Carpanlar=pd.DataFrame(columns=Ortalama_Basliklar)             #Tüm Çarpan Ortalamalarının Birleştirilmesi
-Tum_Carpanlar_2=pd.DataFrame(columns=Ortalama_Basliklar)             #Tüm Çarpan Ortalamalarının Birleştirilmesi
+Tum_Carpanlar_2=pd.DataFrame(columns=Ortalama_Basliklar_2)         #Tüm Çarpan Ortalamalarının Birleştirilmesi
 for i in range(len(Hisse_Adı)):
 
     Hisse_Fiyat=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Kapanış (TL)'].iloc[0]     #Hissenin Kapanış Fiyatı
