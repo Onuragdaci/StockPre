@@ -55,7 +55,7 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     driver.implicitly_wait(5)
     driver.get("https://halkyatirim.com.tr/skorkart/"+Hisse)
     driver.implicitly_wait(20)
-    L01=driver.find_element(By.XPATH,'//*[@id="TBLPIYASADEGER"]/tbody/tr[1]/td[2]').text                 #Hissenin Son Piyasa Değeri
+   L00=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[1]').text L01=driver.find_element(By.XPATH,'//*[@id="TBLPIYASADEGER"]/tbody/tr[1]/td[2]').text                 #Hissenin Son Piyasa Değeri
     L02=driver.find_element(By.XPATH,'//*[@id="TBLPAZARENDEKSLERI"]/tbody/tr[3]/td[2]').text[:-3]        #Hissenin Ödenmiş Sermayesi
     L03=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[13]').text           #Hissenin Özkaynakları
     L04=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[9]').text            #Hissenin Yıllıklandırılmış Net Kârı
