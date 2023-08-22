@@ -147,6 +147,7 @@ for i in range(len(Hisse_Adı)):
     HISSE_FD_FAV=locale.atof(HISSE_FD_FAV)
     
     driver.quit()
+    HISSE_FD_SAT=Filtre2['FD/Satışlar'].to_numpy(dtype='float')[0]                            #Hisse FD/SAT Oranı
     #BIST Piyasa Çarpanları Ortalaması
     BIST_FKX=Hisse_Ozet['F/K'].to_numpy(dtype='float')                                        #BIST F/K Oranı
     BIST_PDDDX=Hisse_Ozet['PD/DD'].to_numpy(dtype='float')                                    #BIST PD/DD Oranı
