@@ -220,7 +220,7 @@ for i in range(len(Hisse_Adı)):
     Carpanlar=pd.DataFrame([Carpanlar],columns=Ortalama_Basliklar)                            #Tüm Çarpanların Birleştirilmesi
     Carpanlar_2=pd.DataFrame([Carpanlar_2],columns=Ortalama_Basliklar_2)                      #Tüm Çarpanların Birleştirilmesi
     Tum_Carpanlar=Tum_Carpanlar.append(Carpanlar)
-    Tum_Carpanlar_2=Tum_Carpanlar.append(Carpanlar_2)
+    Tum_Carpanlar_2=Tum_Carpanlar_2.append(Carpanlar_2)
 
 
 Tum_Carpanlar['POTASİYEL PD'] = Tum_Carpanlar['POTASİYEL PD'].apply(lambda x: round(x, 2))
