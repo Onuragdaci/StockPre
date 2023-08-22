@@ -158,7 +158,7 @@ for i in range(len(Hisse_Adı)):
     SEKTOR_FD_FAV=round(np.nanmean(SEKTOR_FD_FAV),3)                                          #Sektör FD/FAVÖK Ortalaması
     SEKTOR_FD_SAT=round(np.nanmean(SEKTOR_FD_SAT),3)                                          #Sektör FD/SAT Ortalaması
 
-    LL01,LL01,LL02,LL03,LL04,LL05,Tarihsel_Carpanlar,Tah_NetKar,Tah_NetSat=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
+    LL01,LL02,LL03,LL04,LL05,Tarihsel_Carpanlar,Tah_NetKar,Tah_NetSat=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
 
     TarFK=Tarihsel_Carpanlar['F/K'].to_numpy(dtype='float')
     TarFK=round(np.nanmean(TarFK),2)
@@ -176,14 +176,24 @@ for i in range(len(Hisse_Adı)):
     ÖdSer=LL02
     ÖzSer=LL03
     Yıllık_Kar=LL04
+    Tah_Yıllık_Kar=Tah_Net_Kar
+    
     Yıllık_Satıs=LL05
+    Tah_Yıllık_Satıs=Tah_NetSat
 
     Gelecek_FK=PiyDeg/(Yıllık_Kar+0.0001)
+    Gelecek_FK_2=PiyDeg/(Tah_Yıllık_Kar+0.0001)
+    
     Sermaye_Çarpanı=Yıllık_Kar/ÖdSer                               #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
+    Sermaye_Çarpanı_2=Tah_Yıllık_Kar/ÖdSer
+    
     Potansiyel_PD=Yıllık_Kar*7+ÖzSer*0.5                           #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
+    Potansiyel_PD_2=Tah_Yıllık_Kar*7+ÖzSer*0.5
+    
     NetKarMarjı=Yıllık_Kar/(Yıllık_Satıs+0.0001)                   #Net Kâr Marjı
+    NetKarNarjı_2=Tah_Yıllık_Kar/(Tah_Yıllık_Satıs+0.0001)
     PD_NS=PiyDeg/(Yıllık_Satıs +0.0001)                            #Piyasa Değeri / Net Satışlar
-
+    PD_NS_2=PiyDeg/(Tah_Yıllık_Sat+0.0001)
 
     Carpanlar=[Hisse_Adı[i],Sektor,Hisse_Dönem,PiyDeg,ÖdSer,ÖzSer,Yıllık_Kar,Yıllık_Satıs,Hisse_Fiyat,
                 HISSE_FKX,HISSE_PDDDX,HISSE_FD_FAV,HISSE_FD_SAT,
