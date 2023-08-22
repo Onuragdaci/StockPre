@@ -325,7 +325,7 @@ print(Tum_Carpanlar_2)
 col1, col2 = st.columns(2)
 with col1:
     st.subheader('Yıllıklandırılmış Verilere Göre')
-    st.dataframe(Tum_Carpanlar,height=1500)
+    st.dataframe(Tum_Carpanlar,use_container_width=True,height=1500)
 with col2:
    st.subheader('Tahmini Yıl Sonu Verilerine Göre')
-   st.dataframe(Tum_Carpanlar_2,height=1500)
+   st.dataframe(Tum_Carpanlar_2,use_container_width=True,height=1500)
