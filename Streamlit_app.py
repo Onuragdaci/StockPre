@@ -75,7 +75,38 @@ def Yıllıklandirilmiş_Veriler(Hisse):
     Carpanlar = Carpanlar.iloc[:-5]
     Carpanlar.replace('-', np.nan, inplace=True)
     Carpanlar.replace('a.d.', np.nan, inplace=True)
-    driver.close()
+    soup = BeautifulSoup(driver.page_source,"lxml")
+    Finansallar=soup.find("table",id="TBLFINANSALVERİLER3")
+    Finansallar = pd.read_html(str(Finansallar))
+    Finansallar = pd.DataFrame(Finansallar[0])
+    Finansallar = Finansallar.iloc[:-2]
+    Finansallar.replace('-', np.nan, inplace=True)
+    Finansallar.replace('a.d.', np.nan, inplace=True)
+
+    driver.quit()
+
+    NetKar=Finansallar['Net Kâr Çeyrek (Mln TL)'].to_numpy(dtype='float')                       #Çeyreklik Net Kâr Değerleri
+    NetSat=Finansallar['Net Satışlar Çeyrek (Mln TL)'].to_numpy(dtype='float')                  #Çeyreklik Net Satışlar Değerleri
+
+    Donem=L00[-2:]
+    if Donem == '03':
+        Y_NetKar = NetKar[0]*4
+        Y_NetSat = NetSat[0]*4
+
+    if Donem == '06':
+        Y_NetKar = (NetKar[0]+NetKar[1])*2
+        Y_NetSat = (NetSat[0]+NetSat[1])*2
+
+    if Donem == '09':
+        Y_NetKar = (NetKar[0]+NetKar[1]+NetKar[2])*4/3
+        Y_NetSat = (NetSat[0]+NetSat[1]+NetSat[2])*4/3
+
+    if Donem == '12':
+        Y_NetKar = (NetKar[0]+NetKar[1]+NetKar[2]+NetKar[3])
+        Y_NetSat = (NetSat[0]+NetSat[1]+NetSat[2]+NetSat[3])
+
+    Y_NetKar=round(Y_NetKar,2)
+    Y_NetSat=round(Y_NetSat,2)
 
 
     return L01, L02,L03,L04,L05,Carpanlar
