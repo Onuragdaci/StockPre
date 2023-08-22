@@ -197,7 +197,7 @@ for i in range(len(Hisse_Adı)):
     Potansiyel_PD_2=Tah_Yıllık_Kar*7+ÖzSer*0.5
     
     NetKarMarjı=Yıllık_Kar/(Yıllık_Satıs+0.0001)                   #Net Kâr Marjı
-    NetKarNarjı_2=Tah_Yıllık_Kar/(Tah_Yıllık_Sat+0.0001)
+    NetKarMarjı_2=Tah_Yıllık_Kar/(Tah_Yıllık_Sat+0.0001)
     
     PD_NS=PiyDeg/(Yıllık_Satıs +0.0001)                            #Piyasa Değeri / Net Satışlar
     PD_NS_2=PiyDeg/(Tah_Yıllık_Sat+0.0001)
