@@ -319,4 +319,4 @@ Tum_Carpanlar_2=Tum_Carpanlar_2.T
 with col1:
     st.dataframe(Tum_Carpanlar,use_container_width=True)
 with col2:
-st.dataframe(Tum_Carpanlar_2,use_container_width=True)
+    st.dataframe(Tum_Carpanlar_2,use_container_width=True)
