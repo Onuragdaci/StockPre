@@ -52,7 +52,7 @@ with st.sidebar:
 def Yıllıklandirilmiş_Veriler(Hisse):
     print(Hisse)
     driver.implicitly_wait(5)
-    driver.get("https://halkyatirim.com.tr/skorkart/"+Hisse)
+    driver.get("https://analizim.halkyatirim.com.tr/Financial/ScoreCardDetail?hisseKod="+Hisse)
     driver.implicitly_wait(20)
     L00=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[1]').text            #Hissenin Bilanco Donemi
     L01=driver.find_element(By.XPATH,'//*[@id="TBLPIYASADEGER"]/tbody/tr[1]/td[2]').text                 #Hissenin Son Piyasa Değeri
