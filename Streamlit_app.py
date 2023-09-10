@@ -1,17 +1,16 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support import expected_conditions as EC
+from chromedriver_py import binary_path
 from selenium.webdriver.common.by import By
-import locale
-import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 import ssl
 from urllib import request
 import streamlit as st
-locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
-import warnings
+from urllib import request
+import requests
+from tvDatafeed import TvDatafeed, Interval
 warnings.filterwarnings("ignore")
 from webdriver_manager.chrome import ChromeDriverManager
 
