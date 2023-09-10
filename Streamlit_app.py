@@ -364,10 +364,10 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     FinBorc=Borcluluk[Borcluluk[Hisse].isin(['Finansal Borçlar'])].reset_index(drop=True)                                           #Finansal Borçlar
     
     FinBorc_1=FinBorc.drop([1], axis=0).reset_index(drop=True)                                                                      #Kısa Vadeli Finansal Borçlar
-    FinBorc_1=FinBorc.drop(FinBorc.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Kısa Vadeli Finansal Borçlar
+    FinBorc_1=FinBorc_1.drop(FinBorc_1.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Kısa Vadeli Finansal Borçlar
     
     FinBorc_2=FinBorc.drop([0], axis=0).reset_index(drop=True)                                                                      #Uzun Vadeli Finansal Borçlar
-    FinBorc_2=FinBorc.drop(FinBorc.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Uzun Vadeli Finansal Borçlar
+    FinBorc_2=FinBorc_2.drop(FinBorc_2.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Uzun Vadeli Finansal Borçlar
 
     NetSer=Borcluluk[Borcluluk[Hisse].isin(['İşletme Faaliyetlerinden Kaynaklanan Net Nakit'])].reset_index(drop=True)            #Net İşletme Sermayesi
     NetSer=NetSer.drop(NetSer.columns[[0]],axis = 1).to_numpy(dtype='float')                                          #Uzun Vadeli Yükümlülükler
@@ -399,7 +399,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     else:
        Check_4='Negatif' 
 
-    if DonVar>FinBorc:
+    if DonVar>FinBorc[0]:
        Check_5='Pozitif'
     else:
        Check_5='Negatif'  
