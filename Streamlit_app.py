@@ -384,7 +384,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     else:
        Check_1='Negatif'
 
-    if Kaldirac[0]<50:
+    if Fin_Borc[0]<50:
        Check_2='Pozitif'
     else:
        Check_2='Negatif'
