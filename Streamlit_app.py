@@ -187,9 +187,9 @@ def Hisse_Temel_Veriler(Hisse):
     driver.quit()
     return Temel_Veriler_1 , Temel_Veriler_2
 
-def Degerleme(Hisse):
-    Degerleme_1, Degerleme_2=Hisse_Temel_Veriler(Hisse_Adı[0])
-
+def Degerleme(Temel_Veriler_1,Temel_Veriler_2):
+    Degerleme_1=Temel_Veriler_1
+    Degerleme_2=Temel_Veriler_2
     #Model 1 = Hisse_Fiyatıx(Sektör_FK/Şirket_FK) ve Hisse_Fiyatıx(Sektör_PDDD/Şirket_PDDD) 'nin ortalaması
     Degerleme_1['Degerleme 1'] = (Degerleme_1['Fiyat']*(Degerleme_1['Sektör F/K']/Degerleme_1['Cari F/K'])+Degerleme_1['Fiyat']*(Degerleme_1['Sektör PD/DD']/Degerleme_1['Cari PD/DD']))/2
     Degerleme_1['Degerleme 1'] = Degerleme_1['Degerleme 1'].apply(lambda x: round(x, 2))
@@ -274,7 +274,8 @@ def Degerleme(Hisse):
 
     return Degerleme_1, Degerleme_2
 
-Degerleme_1,Degerleme_2 = Degerleme(Hisse_Adı[0])
+Temel_Veriler_1, Temel_Veriler_2=Hisse_Temel_Veriler(Hisse_Adı[0])
+Degerleme_1,Degerleme_2 = Degerleme(Temel_Veriler_1, Temel_Veriler_2)
 col1, col2 = st.columns(2)
 with col1:
     st.subheader('Yıllıklandırılmış Verilere Göre')
