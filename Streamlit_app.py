@@ -364,17 +364,17 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     FinBorc=Borcluluk[Borcluluk[Hisse].isin(['Finansal Borçlar'])].reset_index(drop=True)                                           #Finansal Borçlar
     
     FinBorc_1=FinBorc.drop([1], axis=0).reset_index(drop=True)                                                                      #Kısa Vadeli Finansal Borçlar
-    FinBorc_1=FinBorc_1.drop(FinBorc_1.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Kısa Vadeli Finansal Borçlar
-    
+    FinBorc_1=FinBorc_1.drop(FinBorc_1.columns[[0]],axis = 1).to_numpy(dtype='float')                                               #Kısa Vadeli Finansal Borçlar
     FinBorc_2=FinBorc.drop([0], axis=0).reset_index(drop=True)                                                                      #Uzun Vadeli Finansal Borçlar
-    FinBorc_2=FinBorc_2.drop(FinBorc_2.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Uzun Vadeli Finansal Borçlar
+    FinBorc_2=FinBorc_2.drop(FinBorc_2.columns[[0]],axis = 1).to_numpy(dtype='float')                                               #Uzun Vadeli Finansal Borçlar
 
     NetSer=Borcluluk[Borcluluk[Hisse].isin(['İşletme Faaliyetlerinden Kaynaklanan Net Nakit'])].reset_index(drop=True)            #Net İşletme Sermayesi
     NetSer=NetSer.drop(NetSer.columns[[0]],axis = 1).to_numpy(dtype='float')                                          #Uzun Vadeli Yükümlülükler
     NetBorc=float(Finansallar.iat[0,10])
     Cari_Oran=DonVar/KVY
 
-    Fin_Borc=((FinBorc_1+FinBorc_2)/(DonVar+DurVar+0.0001))*100
+    Fin_Borc=FinBorc_1+FinBorc_2
+    Fin_Borc_Rat=((FinBorc_1+FinBorc_2)/(DonVar+DurVar+0.0001))*100
 
     NetFinGid=float(Finansallar.iat[0,5])
     FAVOK=float(Finansallar.iat[0,3])
@@ -384,7 +384,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     else:
        Check_1='Negatif'
 
-    if Fin_Borc[0]<50:
+    if Fin_Borc_Rat[0]<50:
        Check_2='Pozitif'
     else:
        Check_2='Negatif'
@@ -399,7 +399,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     else:
        Check_4='Negatif' 
 
-    if DonVar>FinBorc[0]:
+    if DonVar>Fin_Borc[0]:
        Check_5='Pozitif'
     else:
        Check_5='Negatif'  
@@ -407,7 +407,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     if NetFinGid<(FAVOK/5):
        Check_6='Pozitif'
     else:
-       Check_6='Negatif'             
+       Check_6='Negatif'              
 
     Borcluluk_Basliklar=['Hisse Adı',
               'Cari Oran > 1.5',
