@@ -415,7 +415,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
               'Net İşletme Sermayesi > 0',
               'Net Borç < 0',
               'Dönen Varlıklar > Finansal Borç',
-              'Net Finansal Gider < FAVÖK -/5']
+              'Net Finansal Gider < FAVÖK /5']
     
     Borcluluk=[Hisse,Check_1,Check_2,Check_3,Check_4,Check_5,Check_6] 
     count_3 = len([i for i in Borcluluk[1::] if str(i) == 'Pozitif'])
