@@ -411,7 +411,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
 
     Borcluluk_Basliklar=['Hisse Adı',
               'Cari Oran > 1.5',
-              'Borçluluk < 50%',
+              'Finansal Borçluluk < 50%',
               'Net İşletme Sermayesi > 0',
               'Net Borç < 0',
               'Dönen Varlıklar > Finansal Borç',
