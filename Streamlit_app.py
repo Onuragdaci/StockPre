@@ -10,7 +10,6 @@ import streamlit as st
 from urllib import request
 import requests
 from tvDatafeed import TvDatafeed, Interval
-warnings.filterwarnings("ignore")
 from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
