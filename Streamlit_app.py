@@ -361,16 +361,20 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     UVY=Borcluluk[Borcluluk[Hisse].isin(['Uzun Vadeli Yükümlülükler'])].reset_index(drop=True)                #Uzun Vadeli Yükümlülükler
     UVY=UVY.drop(UVY.columns[[0]],axis = 1).to_numpy(dtype='float')                                           #Uzun Vadeli Yükümlülükler
 
-    FinBorc=Borcluluk[Borcluluk[Hisse].isin(['Finansal Borçlar'])].reset_index(drop=True)                                         #Finansal Borçlar
-    FinBorc=FinBorc.drop([1], axis=0).reset_index(drop=True)                                                                      #Kısa Vadeli Finansal Borçlar
-    FinBorc=FinBorc.drop(FinBorc.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Kısa Vadeli Finansal Borçlar
+    FinBorc=Borcluluk[Borcluluk[Hisse].isin(['Finansal Borçlar'])].reset_index(drop=True)                                           #Finansal Borçlar
+    
+    FinBorc_1=FinBorc.drop([1], axis=0).reset_index(drop=True)                                                                      #Kısa Vadeli Finansal Borçlar
+    FinBorc_1=FinBorc.drop(FinBorc.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Kısa Vadeli Finansal Borçlar
+    
+    FinBorc_2=FinBorc.drop([0], axis=0).reset_index(drop=True)                                                                      #Uzun Vadeli Finansal Borçlar
+    FinBorc_2=FinBorc.drop(FinBorc.columns[[0]],axis = 1).to_numpy(dtype='float')                                                   #Uzun Vadeli Finansal Borçlar
 
     NetSer=Borcluluk[Borcluluk[Hisse].isin(['İşletme Faaliyetlerinden Kaynaklanan Net Nakit'])].reset_index(drop=True)            #Net İşletme Sermayesi
     NetSer=NetSer.drop(NetSer.columns[[0]],axis = 1).to_numpy(dtype='float')                                          #Uzun Vadeli Yükümlülükler
     NetBorc=float(Finansallar.iat[0,10])
     Cari_Oran=DonVar/KVY
 
-    Kaldirac=((KVY+UVY)/(DonVar+DurVar+0.0001))*100
+    Fin_Borc=((FinBorc_1+FinBorc_2)/(DonVar+DurVar+0.0001))*100
 
     NetFinGid=float(Finansallar.iat[0,5])
     FAVOK=float(Finansallar.iat[0,3])
