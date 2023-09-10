@@ -37,295 +37,248 @@ with st.sidebar:
     Hisse_Adı = st.selectbox('Hisse Adı',Hisse_Ozet['Kod'])
     Hisse_Adı=[Hisse_Adı]
 
-    options = webdriver.ChromeOptions()
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
-    options.add_argument('--log-level=3')
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--ignore-ssl-errors')
-    options.add_argument("--disable-extensions")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version='116.0.5845.96').install()), options=options)
+options = webdriver.ChromeOptions()
+options.add_argument('--disable-gpu')
+options.add_argument('--headless')
+options.add_argument('--log-level=3')
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--ignore-ssl-errors')
+options.add_argument("--disable-extensions")
+options.add_argument("--disable-gpu")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
+driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version='116.0.5845.96').install()), options=options)
   
-def Yıllıklandirilmiş_Veriler(Hisse):
-    print(Hisse)
-    driver.implicitly_wait(5)
-    driver.get("https://analizim.halkyatirim.com.tr/Financial/ScoreCardDetail?hisseKod="+Hisse)
+def Hisse_Temel_Veriler(Hisse):
+    driver.get('https://analizim.halkyatirim.com.tr/Financial/ScoreCardDetail?hisseKod='+Hisse)
     driver.implicitly_wait(20)
-    L00=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[1]').text            #Hissenin Bilanco Donemi
-    L01=driver.find_element(By.XPATH,'//*[@id="TBLPIYASADEGER"]/tbody/tr[1]/td[2]').text                 #Hissenin Son Piyasa Değeri
-    L02=driver.find_element(By.XPATH,'//*[@id="TBLPAZARENDEKSLERI"]/tbody/tr[3]/td[2]').text[:-3]        #Hissenin Ödenmiş Sermayesi
-    L03=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[13]').text           #Hissenin Özkaynakları
-    L04=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[9]').text            #Hissenin Yıllıklandırılmış Net Kârı
-    L05=driver.find_element(By.XPATH,'//*[@id="TBLFINANSALVERİLER3"]/tbody/tr[1]/td[3]').text            #Hissenin Yıllıklandırılmış Net Satışları
 
-
-    L01=locale.atof(L01)            #Hissenin Son Piyasa Değeri
-    L02=locale.atof(L02)/1000000    #Hissenin Ödenmiş Sermayesi
-    L03=locale.atof(L03)            #Hissenin Özkaynakları
-    L04=locale.atof(L04)            #Hissenin Yıllıklandırılmış Net Kârı
-    L05=locale.atof(L05)            #Hissenin Yıllıklandırılmış Net Satışları
+    BlcDnm=driver.find_element(By.XPATH,'/html/body/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/span[2]/strong').text            #Hissenin Bilanco Dönemi
+    SnFyt=driver.find_element(By.XPATH,'/html/body/div[2]/div[2]/div/div[1]/div[2]/div[3]/div[1]/div/div[2]/div[1]').text
+    SnFyt=float(SnFyt)
 
     soup = BeautifulSoup(driver.page_source,"lxml")
-    Carpanlar=soup.find("table",id="TBLFINANSALVERİLER1")                   #Carpanlar
-    Carpanlar = pd.read_html(str(Carpanlar))                                #Temel Teknik Verileri Dataframe'e dönüştü
-    Carpanlar=pd.DataFrame(Carpanlar[0])
-    Carpanlar = Carpanlar.iloc[:-5]
-    Carpanlar.replace('-', np.nan, inplace=True)
-    Carpanlar.replace('a.d.', np.nan, inplace=True)
-    soup = BeautifulSoup(driver.page_source,"lxml")
-    Finansallar=soup.find("table",id="TBLFINANSALVERİLER3")
-    Finansallar = pd.read_html(str(Finansallar))
-    Finansallar = pd.DataFrame(Finansallar[0])
-    Finansallar = Finansallar.iloc[:-2]
-    Finansallar.replace('-', np.nan, inplace=True)
-    Finansallar.replace('a.d.', np.nan, inplace=True)
+    PzrEnd=pd.read_html(str(soup.find(id='pazar-endeskleri')))[0]
+    FytPrf=pd.read_html(str(soup.find(id='fiyat-performansi')))[0]
+    PysDgr=pd.read_html(str(soup.find(id='piyasa-degeri')))[0]
+    TknVrl=pd.read_html(str(soup.find(id='teknik-veriler')))[0]
+    TmlVrl=pd.read_html(str(soup.find(id='temel-veri-analizleri')))[0]
+    FytOzt=pd.read_html(str(soup.find(id='fiyat-ozeti')))[0]
 
-    
+    Finansallar=pd.read_html(str(soup.find("table",id="TBLFINANSALVERİLER1")))               #Finansallar
+    Karlılık=pd.read_html(str(soup.find("table",id="TBLFINANSALVERİLER2")))                  #Karlılık
+    Carpanlar=pd.read_html(str(soup.find("table",id="TBLFINANSALVERİLER3")) )                #Carpanlar
 
-    NetKar=Finansallar['Net Kâr Çeyrek (Mln TL)'].to_numpy(dtype='float')                       #Çeyreklik Net Kâr Değerleri
-    NetSat=Finansallar['Net Satışlar Çeyrek (Mln TL)'].to_numpy(dtype='float')                  #Çeyreklik Net Satışlar Değerleri
+    Finansallar=Finansallar[0].iloc[:-2]
+    Karlılık=Karlılık[0].iloc[:-2]
+    Carpanlar=Carpanlar[0].iloc[:-2]
 
-    Donem=L00[-2:]
+    PysDgr=float(PysDgr.iat[0,1])
+    OdnSrm=float(PzrEnd.iat[2,1][:-3].replace(',', ''))/1000000
+    OzSrm=float(Finansallar.iat[0,12])
+    Y_NetKar=float(Finansallar.iat[0,8])
+    Y_NetSat=float(Finansallar.iat[0,2])
+    NtBrc=float(Finansallar.iat[0,10])
+
+    #Cari Piyasa Çarpanlarının Hesaplanması
+    CariFK=TmlVrl.iat[0,1]
+    CariPDDD=TmlVrl.iat[1,1]
+    CariFDFV=TmlVrl.iat[2,1]
+    CariFDST=round((PysDgr+NtBrc)/(Y_NetSat+0.001),2)
+
+    #Tarihsel Ortalamaların Hesaplanması
+    TarFK=round(np.nanmean(Carpanlar['F/K'].to_numpy(dtype='float')),2)
+    TarPDDD=round(np.nanmean(Carpanlar['PD/DD'].to_numpy(dtype='float')),2)
+    TarFDFV=round(np.nanmean(Carpanlar['FD/FAVÖK'].to_numpy(dtype='float')),2)
+    TarFDST=round(np.nanmean(Carpanlar['FD/Satışlar'].to_numpy(dtype='float')),2)
+
+    #Bist Ortalamalarının Hesaplanması
+    BstVri = pd.read_html('https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-Ve-Oranlar.aspx#page-1',decimal=',', thousands='.')
+    BstVri1=BstVri[6]
+    BstVri1.replace('A/D', np.nan, inplace=True)
+
+    BstFK=round(np.nanmean(BstVri1['F/K'].to_numpy(dtype='float')),2)
+    BstPDDD=round(np.nanmean(BstVri1['PD/DD'].to_numpy(dtype='float')),2)
+    BstFDFV=round(np.nanmean(BstVri1['FD/FAVÖK'].to_numpy(dtype='float')),2)
+    BstFDST=round(np.nanmean(BstVri1['FD/Satışlar'].to_numpy(dtype='float')),2)
+
+    #Sektör Ortalamalarının Hesaplanması
+    BstVri2=BstVri[2]
+    Sktr=BstVri2.loc[BstVri2['Kod'] == Hisse, 'Sektör'].iloc[0]
+    SktrHsslr=BstVri1[BstVri2['Sektör'] == Sktr]
+
+    SktrFK=round(np.nanmean(SktrHsslr['F/K'].to_numpy(dtype='float')),2)
+    SktrPDDD=round(np.nanmean(SktrHsslr['PD/DD'].to_numpy(dtype='float')),2)
+    SktrFDFV=round(np.nanmean(SktrHsslr['FD/FAVÖK'].to_numpy(dtype='float')),2)
+    SktrFDST=round(np.nanmean(SktrHsslr['FD/Satışlar'].to_numpy(dtype='float')),2)
+
+    #Geçmişe Göre Gelecek Değerler
+    GlckFk=round(PysDgr/(Y_NetKar+0.0001),2)
+    PotPD=round(Y_NetKar*7+OzSrm*0.5,2)
+    NKarMarj=round(Y_NetKar/(Y_NetSat+0.0001),2)
+    PD_NS=round(PysDgr/(Y_NetSat+0.0001),2)
+
+    #tahmini Gelecek Değerler
+    C_NetKar=Finansallar['Net Kâr Çeyrek (Mln TL)'].to_numpy(dtype='float')                       #Çeyreklik Net Kâr Değerleri
+    C_NetSat=Finansallar['Net Satışlar Çeyrek (Mln TL)'].to_numpy(dtype='float')                  #Çeyreklik Net Satışlar Değerleri
+
+    Donem=BlcDnm[-2:]
     if Donem == '03':
-        Y_NetKar = NetKar[0]*4
-        Y_NetSat = NetSat[0]*4
+        T_NetKar = C_NetKar[0]*4
+        T_NetSat = C_NetSat[0]*4
 
     if Donem == '06':
-        Y_NetKar = (NetKar[0]+NetKar[1])*2
-        Y_NetSat = (NetSat[0]+NetSat[1])*2
+        T_NetKar = (C_NetKar[0]+C_NetKar[1])*2
+        T_NetSat = (C_NetSat[0]+C_NetSat[1])*2
 
     if Donem == '09':
-        Y_NetKar = (NetKar[0]+NetKar[1]+NetKar[2])*4/3
-        Y_NetSat = (NetSat[0]+NetSat[1]+NetSat[2])*4/3
+        T_NetKar = (C_NetKar[0]+C_NetKar[1]+C_NetKar[2])*4/3
+        T_NetSat = (C_NetSat[0]+C_NetSat[1]+C_NetSat[2])*4/3
 
     if Donem == '12':
-        Y_NetKar = (NetKar[0]+NetKar[1]+NetKar[2]+NetKar[3])
-        Y_NetSat = (NetSat[0]+NetSat[1]+NetSat[2]+NetSat[3])
+        T_NetKar = (C_NetKar[0]+C_NetKar[1]+C_NetKar[2]+C_NetKar[3])
+        T_NetSat = (C_NetSat[0]+C_NetSat[1]+C_NetSat[2]+C_NetSat[3])
 
-    NetKar=round(Y_NetKar,2)
-    NetSat=round(Y_NetSat,2)
+    T_NetKar=round(T_NetKar,2)
+    T_NetSat=round(T_NetSat,2)
 
+    T_Fk=round(PysDgr/(T_NetKar+0.0001),2)
+    T_PotPD=round(T_NetKar*7+OzSrm*0.5,2)
+    T_NKarMarj=round(Y_NetKar/(T_NetSat+0.0001),2)
+    T_PD_NS=round(PysDgr/(T_NetSat+0.0001),2)
 
-    return L01,L02,L03,L04,L05,Carpanlar,NetKar,NetSat
+    Basliklar_1=['Hisse Adı','Sektör','Dönem',
+            'Piyasa Değeri','Ödenmiş Sermaye','Öz Sermaye',
+            'Yıllık Kar','Yıllık Satış','Fiyat',
+            'Cari F/K','Cari PD/DD','Cari FD/FAVÖK','Cari FD/SATIŞLAR',
+            'Gelecek F/K','Potansiyel PD','Net Kar Marjı','PD/NS',
+            'Tarihsel F/K','Tarihsel PD/DD','Tarihsel FD/FAVÖK','Tarihsel FD/SATIŞLAR',
+            'Sektör F/K','Sektör PD/DD','Sektör FD/FAVÖK','Sektör FD/SATIŞLAR',
+            'BIST F/K','BIST PD/DD','BIST FD/FAVÖK','BIST FD/SATIŞLAR']
 
-Hisse_Ozet.replace('A/D', np.nan, inplace=True)                                           #Anlamsız Verileri NA ya çevir
+    Basliklar_2=['Hisse Adı','Sektör','Dönem',
+            'Piyasa Değeri','Ödenmiş Sermaye','Öz Sermaye',
+            'Tahmini Yıllık Kar','Tahmini Yıllık Satış','Fiyat',
+            'Cari F/K','Cari PD/DD','Cari FD/FAVÖK','Cari FD/SATIŞLAR',
+            'Tahmini Gelecek F/K','Tahmini Potansiyel PD','Tahmini Net Kar Marjı','Tahmini PD/NS',
+            'Tarihsel F/K','Tarihsel PD/DD','Tarihsel FD/FAVÖK','Tarihsel FD/SATIŞLAR',
+            'Sektör F/K','Sektör PD/DD','Sektör FD/FAVÖK','Sektör FD/SATIŞLAR',
+            'BIST F/K','BIST PD/DD','BIST FD/FAVÖK','BIST FD/SATIŞLAR']
 
-Ortalama_Basliklar=['Hisse Adı','Sektör','Dönem','Piyasa Değeri','Ödenmiş Sermaye','Öz Sermaye','YILLIK KAR','YILLIK SATIŞ','Fiyat',
-                    'F/K','PD/DD','FD/FAVÖK','FD/SATIŞLAR',
-                    'Tarihsel F/K','Tarihsel PD/DD','Tarihsel FD/FAVÖK','Tarihsel FD/SATIŞLAR',
-                    'GELECEK FK','POTASİYEL PD','NET KAR MARJI','PD/NS',
-                    'BIST F/K','BIST PD/DD','BIST FD/FAVÖK','BIST FD/SATIŞLAR',
-                    'SEKTÖR F/K','SEKTÖR PD/DD','SEKTÖR FD/FAVÖK','SEKTÖR FD/SATIŞLAR']
+    Temel_Veriler_1=[Hisse,Sktr,BlcDnm,
+                   PysDgr,OdnSrm,OzSrm,
+                   Y_NetKar,Y_NetSat,SnFyt,
+                   CariFK,CariPDDD,CariFDFV,CariFDST,
+                   GlckFk,PotPD,NKarMarj,PD_NS,
+                   TarFK,TarPDDD,TarFDFV,TarFDST,
+                   SktrFK,SktrPDDD,SktrFDFV,SktrFDST,
+                   BstFK,BstPDDD,BstFDFV,BstFDST]
+    Temel_Veriler_2=[Hisse,Sktr,BlcDnm,
+                   PysDgr,OdnSrm,OzSrm,
+                   T_NetKar,T_NetSat,SnFyt,
+                   CariFK,CariPDDD,CariFDFV,CariFDST,
+                   T_Fk,T_PotPD,T_NKarMarj,T_PD_NS,
+                   TarFK,TarPDDD,TarFDFV,TarFDST,
+                   SktrFK,SktrPDDD,SktrFDFV,SktrFDST,
+                   BstFK,BstPDDD,BstFDFV,BstFDST]
 
-Ortalama_Basliklar_2=['Hisse Adı','Sektör','Dönem','Piyasa Değeri','Ödenmiş Sermaye','Öz Sermaye','TAHMİNİ YILLIK KAR','TAHMİNİ YILLIK SATIŞ','Fiyat',
-                    'F/K','PD/DD','FD/FAVÖK','FD/SATIŞLAR',
-                    'Tarihsel F/K','Tarihsel PD/DD','Tarihsel FD/FAVÖK','Tarihsel FD/SATIŞLAR',
-                    'TAHMİNİ GELECEK FK','TAHMİNİ POTASİYEL PD','TAHMİNİ NET KAR MARJI','TAHMİNİ PD/NS',
-                    'BIST F/K','BIST PD/DD','BIST FD/FAVÖK','BIST FD/SATIŞLAR',
-                    'SEKTÖR F/K','SEKTÖR PD/DD','SEKTÖR FD/FAVÖK','SEKTÖR FD/SATIŞLAR']
-
-Tum_Carpanlar=pd.DataFrame(columns=Ortalama_Basliklar)             #Tüm Çarpan Ortalamalarının Birleştirilmesi
-Tum_Carpanlar_2=pd.DataFrame(columns=Ortalama_Basliklar_2)         #Tüm Çarpan Ortalamalarının Birleştirilmesi
-for i in range(len(Hisse_Adı)):
-    LL01,LL02,LL03,LL04,LL05,Tarihsel_Carpanlar,Tah_NetKar,Tah_NetSat=Yıllıklandirilmiş_Veriler(Hisse_Adı[i])
-    Hisse_Fiyat=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Kapanış (TL)'].iloc[0]     #Hissenin Kapanış Fiyatı
-    Hisse_Dönem=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Son Dönem'].iloc[0]        #Hissenin Bilanço Dönemi
-
-    #Hisse Piyasa Çarpanları
-    Hisse_Finansallar=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Kod'].iloc[0]        #Hissenin Bulunması
-    Filtre2=Hisse_Ozet[Hisse_Ozet['Kod'].str.contains(Hisse_Finansallar)]                     #Hisse Bazlı Filtreleme
-    
-    HISSE_FKX=driver.find_element(By.XPATH,'//*[@id="TBLTEMELANALIZ"]/tbody/tr[1]/td[2]').text                    #Hisse F/K oranı
-    HISSE_PDDDX=driver.find_element(By.XPATH,'//*[@id="TBLTEMELANALIZ"]/tbody/tr[2]/td[2]').text                  #Hisse PD/DD oranı
-    HISSE_FD_FAV=driver.find_element(By.XPATH,'//*[@id="TBLTEMELANALIZ"]/tbody/tr[3]/td[2]').text                 #Hisse FD/FAVÖK Oranı
-
-    HISSE_FKX=locale.atof(HISSE_FKX)
-    HISSE_PDDDX=locale.atof(HISSE_PDDDX)
-    HISSE_FD_FAV=locale.atof(HISSE_FD_FAV)
-    
+    Temel_Veriler_1=pd.DataFrame([Temel_Veriler_1],columns=Basliklar_1)
+    Temel_Veriler_2=pd.DataFrame([Temel_Veriler_2],columns=Basliklar_2)
     driver.quit()
-    HISSE_FD_SAT=Filtre2['FD/Satışlar'].to_numpy(dtype='float')[0]                            #Hisse FD/SAT Oranı
-    #BIST Piyasa Çarpanları Ortalaması
-    BIST_FKX=Hisse_Ozet['F/K'].to_numpy(dtype='float')                                        #BIST F/K Oranı
-    BIST_PDDDX=Hisse_Ozet['PD/DD'].to_numpy(dtype='float')                                    #BIST PD/DD Oranı
-    BIST_FD_FAV=Hisse_Ozet['FD/FAVÖK'].to_numpy(dtype='float')                                #BIST FD/FAVÖK Oranı
-    BIST_FD_SAT=Hisse_Ozet['FD/Satışlar'].to_numpy(dtype='float')                             #BIST FD/SAT Oranı
-    BIST_FKX=round(np.nanmean(BIST_FKX),3)                                                    #BIST Ortalaması
-    BIST_PDDDX=round(np.nanmean(BIST_PDDDX),3)                                                #BIST PD/DD Ortalaması
-    BIST_FD_FAV=round(np.nanmean(BIST_FD_FAV),3)                                              #BIST FD/FAVÖK Ortalaması
-    BIST_FD_SAT=round(np.nanmean(BIST_FD_SAT),3)                                              #BIST FD/SAT Ortalaması
+    return Temel_Veriler_1 , Temel_Veriler_2
 
-    #Sektörel Piyasa Çarpanları Ortalamalası
-    Sektor=Hisse_Ozet.loc[Hisse_Ozet['Kod'] == Hisse_Adı[i], 'Sektör'].iloc[0]                #Sektörün Bulunması
-    Filtre=Hisse_Ozet[Hisse_Ozet['Sektör'].str.contains(Sektor)]                              #Sektörel Bazlı Filtreleme
-    SEKTOR_FKX=Filtre['F/K'].to_numpy(dtype='float')                                          #Sektör F/K Oranı
-    SEKTOR_PDDDX=Filtre['PD/DD'].to_numpy(dtype='float')                                      #Sektör PD/DD Oranı
-    SEKTOR_FD_FAV=Filtre['FD/FAVÖK'].to_numpy(dtype='float')                                  #Sektör FD/FAVÖK Oranı
-    SEKTOR_FD_SAT=Filtre['FD/Satışlar'].to_numpy(dtype='float')                               #Sektör FD/SAT Oranı
-    SEKTOR_FKX=round(np.nanmean(SEKTOR_FKX),3)                                                #Sektör Ortalaması
-    SEKTOR_PDDDX=round(np.nanmean(SEKTOR_PDDDX),3)                                            #Sektör PD/DD Ortalaması
-    SEKTOR_FD_FAV=round(np.nanmean(SEKTOR_FD_FAV),3)                                          #Sektör FD/FAVÖK Ortalaması
-    SEKTOR_FD_SAT=round(np.nanmean(SEKTOR_FD_SAT),3)                                          #Sektör FD/SAT Ortalaması
+def Degerleme(Hisse):
+    Degerleme_1, Degerleme_2=Hisse_Temel_Veriler(Hisse_Adı[0])
 
-    
+    #Model 1 = Hisse_Fiyatıx(Sektör_FK/Şirket_FK) ve Hisse_Fiyatıx(Sektör_PDDD/Şirket_PDDD) 'nin ortalaması
+    Degerleme_1['Degerleme 1'] = (Degerleme_1['Fiyat']*(Degerleme_1['Sektör F/K']/Degerleme_1['Cari F/K'])+Degerleme_1['Fiyat']*(Degerleme_1['Sektör PD/DD']/Degerleme_1['Cari PD/DD']))/2
+    Degerleme_1['Degerleme 1'] = Degerleme_1['Degerleme 1'].apply(lambda x: round(x, 2))
 
-    TarFK=Tarihsel_Carpanlar['F/K'].to_numpy(dtype='float')
-    TarFK=round(np.nanmean(TarFK),2)
+    Degerleme_2['Degerleme 1'] = (Degerleme_2['Fiyat']*(Degerleme_2['Sektör F/K']/Degerleme_2['Cari F/K'])+Degerleme_1['Fiyat']*(Degerleme_2['Sektör PD/DD']/Degerleme_2['Cari PD/DD']))/2
+    Degerleme_2['Degerleme 1'] = Degerleme_2['Degerleme 1'].apply(lambda x: round(x, 2))
 
-    TarPD_DD=Tarihsel_Carpanlar['PD/DD'].to_numpy(dtype='float')
-    TarPD_DD=round(np.nanmean(TarPD_DD),2)
+    #Model 2 = (Hisse Fiyatı/Şirket_FK)xSektör_FK ve (Hisse Fiyatı/Şirket_FK)xBist_FK 'nın ortalaması
+    Degerleme_1['Degerleme 2'] = ((Degerleme_1['Fiyat']/Degerleme_1['Cari F/K'])*Degerleme_1['Sektör F/K']+(Degerleme_1['Fiyat']/Degerleme_1['Cari F/K'])*Degerleme_1['BIST F/K'])/2
+    Degerleme_1['Degerleme 2'] = Degerleme_1['Degerleme 2'].apply(lambda x: round(x, 2))
 
-    TarFD_FAV=Tarihsel_Carpanlar['FD/FAVÖK'].to_numpy(dtype='float')
-    TarFD_FAV=round(np.nanmean(TarFD_FAV),2)
+    Degerleme_2['Degerleme 2'] = ((Degerleme_2['Fiyat']/Degerleme_2['Cari F/K'])*Degerleme_2['Sektör F/K']+(Degerleme_2['Fiyat']/Degerleme_2['Cari F/K'])*Degerleme_2['BIST F/K'])/2
+    Degerleme_2['Degerleme 2'] = Degerleme_2['Degerleme 2'].apply(lambda x: round(x, 2))
 
-    TarFD_SAT=Tarihsel_Carpanlar['FD/Satışlar'].to_numpy(dtype='float')
-    TarFD_SAT=round(np.nanmean(TarFD_SAT),2)
+    #Model 3 = Gelecek_FK=(Piyasa Değeri / Yıllıklandırılmış Net Kâr) olmak üzere  (Hisse Fiyatı/Gelecek FK)xBist_FK ve (Hisse Fiyatı/Gelecek FK)xSektör_FK 'nın ortalaması
+    Degerleme_1['Degerleme 3'] = ((Degerleme_1['Fiyat']/Degerleme_1['Gelecek F/K'])*Degerleme_1['Sektör F/K']+(Degerleme_1['Fiyat']/Degerleme_1['Gelecek F/K'])*Degerleme_1['BIST F/K'])/2
+    Degerleme_1['Degerleme 3'] = Degerleme_1['Degerleme 3'].apply(lambda x: round(x, 2))
 
-    PiyDeg=LL01
-    ÖdSer=LL02
-    ÖzSer=LL03
-    Yıllık_Kar=LL04
-    Tah_Yıllık_Kar=Tah_NetKar
-    
-    Yıllık_Satıs=LL05
-    Tah_Yıllık_Sat=Tah_NetSat
+    Degerleme_2['Degerleme 3'] = ((Degerleme_2['Fiyat']/Degerleme_2['Tahmini Gelecek F/K'])*Degerleme_2['Sektör F/K']+(Degerleme_2['Fiyat']/Degerleme_2['Tahmini Gelecek F/K'])*Degerleme_2['BIST F/K'])/2
+    Degerleme_2['Degerleme 3'] = Degerleme_2['Degerleme 3'].apply(lambda x: round(x, 2))
 
-    Gelecek_FK=PiyDeg/(Yıllık_Kar+0.0001)
-    Gelecek_FK_2=PiyDeg/(Tah_Yıllık_Kar+0.0001)
-    
-    Sermaye_Çarpanı=Yıllık_Kar/ÖdSer                               #Şirket Sermayesi kadar kâr elde ederse fiyatı 10 tl eder.
-    Sermaye_Çarpanı_2=Tah_Yıllık_Kar/ÖdSer
-    
-    Potansiyel_PD=Yıllık_Kar*7+ÖzSer*0.5                           #Potansiyel Piyasa Değeri Yıllıklandırılmış Kâr x 7 + Özsermaye x 0.5
-    Potansiyel_PD_2=Tah_Yıllık_Kar*7+ÖzSer*0.5
-    
-    NetKarMarjı=Yıllık_Kar/(Yıllık_Satıs+0.0001)                   #Net Kâr Marjı
-    NetKarMarjı_2=Tah_Yıllık_Kar/(Tah_Yıllık_Sat+0.0001)
-    
-    PD_NS=PiyDeg/(Yıllık_Satıs +0.0001)                            #Piyasa Değeri / Net Satışlar
-    PD_NS_2=PiyDeg/(Tah_Yıllık_Sat+0.0001)
+    #Model 4 = Şirket Sermayesi Kadar Kâr Elde Ederse 10 TL değeri vardır.
+    Degerleme_1['Degerleme 4'] = (Degerleme_1['Yıllık Kar']/Degerleme_1['Ödenmiş Sermaye'])*10
+    Degerleme_1['Degerleme 4'] = Degerleme_1['Degerleme 4'].apply(lambda x: round(x, 2))
 
-    Carpanlar=[Hisse_Adı[i],Sektor,Hisse_Dönem,PiyDeg,ÖdSer,ÖzSer,Yıllık_Kar,Yıllık_Satıs,Hisse_Fiyat,
-                HISSE_FKX,HISSE_PDDDX,HISSE_FD_FAV,HISSE_FD_SAT,
-                TarFK,TarPD_DD,TarFD_FAV,TarFD_SAT,
-                Gelecek_FK,Potansiyel_PD,NetKarMarjı,PD_NS,
-                BIST_FKX,BIST_PDDDX,BIST_FD_FAV,BIST_FD_SAT,
-                SEKTOR_FKX,SEKTOR_PDDDX,SEKTOR_FD_FAV,SEKTOR_FD_SAT]
+    Degerleme_2['Degerleme 4'] = (Degerleme_2['Tahmini Yıllık Kar']/Degerleme_2['Ödenmiş Sermaye'])*10
+    Degerleme_2['Degerleme 4'] = Degerleme_2['Degerleme 4'].apply(lambda x: round(x, 2))
 
+    #Model 5 = PD/DD Öz Sermayenin 10 Katı olmalı. (Öz Sermaye Kârlılığı x10/(PD/DD))xHisse_Fiyatı
+    Degerleme_1['Degerleme 5'] = (10*(Degerleme_1['Yıllık Kar']/Degerleme_1['Öz Sermaye'])/Degerleme_1['Cari PD/DD'])*Degerleme_1['Fiyat']
+    Degerleme_1['Degerleme 5'] = Degerleme_1['Degerleme 5'].apply(lambda x: round(x, 2))
 
-    Carpanlar_2=[Hisse_Adı[i],Sektor,Hisse_Dönem,PiyDeg,ÖdSer,ÖzSer,Yıllık_Kar,Yıllık_Satıs,Hisse_Fiyat,
-                HISSE_FKX,HISSE_PDDDX,HISSE_FD_FAV,HISSE_FD_SAT,
-                TarFK,TarPD_DD,TarFD_FAV,TarFD_SAT,
-                Gelecek_FK_2,Potansiyel_PD_2,NetKarMarjı_2,PD_NS_2,
-                BIST_FKX,BIST_PDDDX,BIST_FD_FAV,BIST_FD_SAT,
-                SEKTOR_FKX,SEKTOR_PDDDX,SEKTOR_FD_FAV,SEKTOR_FD_SAT]
+    Degerleme_2['Degerleme 5'] = (10*(Degerleme_2['Tahmini Yıllık Kar']/Degerleme_2['Öz Sermaye'])/Degerleme_2['Cari PD/DD'])*Degerleme_2['Fiyat']
+    Degerleme_2['Degerleme 5'] = Degerleme_2['Degerleme 5'].apply(lambda x: round(x, 2))
 
-    Carpanlar=pd.DataFrame([Carpanlar],columns=Ortalama_Basliklar)                            #Tüm Çarpanların Birleştirilmesi
-    Carpanlar_2=pd.DataFrame([Carpanlar_2],columns=Ortalama_Basliklar_2)                      #Tüm Çarpanların Birleştirilmesi
-    Tum_Carpanlar=Tum_Carpanlar.append(Carpanlar)
-    Tum_Carpanlar_2=Tum_Carpanlar_2.append(Carpanlar_2)
+    #Model 6 = Potansiyel PD/Özsermaye
+    Degerleme_1['Degerleme 6'] = Degerleme_1['Potansiyel PD']/Degerleme_1['Ödenmiş Sermaye']
+    Degerleme_1['Degerleme 6'] = Degerleme_1['Degerleme 6'].apply(lambda x: round(x, 2))
 
+    Degerleme_2['Degerleme 6'] = Degerleme_2['Tahmini Potansiyel PD']/Degerleme_2['Ödenmiş Sermaye']
+    Degerleme_2['Degerleme 6'] = Degerleme_2['Degerleme 6'].apply(lambda x: round(x, 2))
 
-Tum_Carpanlar['POTASİYEL PD'] = Tum_Carpanlar['POTASİYEL PD'].apply(lambda x: round(x, 2))
-Tum_Carpanlar['NET KAR MARJI'] = Tum_Carpanlar['NET KAR MARJI'].apply(lambda x: round(x, 2))
-Tum_Carpanlar['GELECEK FK'] = Tum_Carpanlar['GELECEK FK'].apply(lambda x: round(x, 2))
-Tum_Carpanlar['PD/NS'] = Tum_Carpanlar['PD/NS'].apply(lambda x: round(x, 2))
+    #Model 7 = 100*(Net Kar Marjı / PD_NS )*Hisse_Fiyatı
+    Degerleme_1['Degerleme 7'] = 10*(Degerleme_1['Net Kar Marjı']/Degerleme_1['PD/NS'])*Degerleme_1['Fiyat']
+    Degerleme_1['Degerleme 7'] = Degerleme_1['Degerleme 7'].apply(lambda x: round(x, 2))
 
-Tum_Carpanlar_2['TAHMİNİ POTASİYEL PD'] = Tum_Carpanlar_2['TAHMİNİ POTASİYEL PD'].apply(lambda x: round(x, 2))
-Tum_Carpanlar_2['TAHMİNİ NET KAR MARJI'] = Tum_Carpanlar_2['TAHMİNİ NET KAR MARJI'].apply(lambda x: round(x, 2))
-Tum_Carpanlar_2['TAHMİNİ GELECEK FK'] = Tum_Carpanlar_2['TAHMİNİ GELECEK FK'].apply(lambda x: round(x, 2))
-Tum_Carpanlar_2['TAHMİNİ PD/NS'] = Tum_Carpanlar_2['TAHMİNİ PD/NS'].apply(lambda x: round(x, 2))
+    Degerleme_2['Degerleme 7'] = 10*(Degerleme_2['Tahmini Net Kar Marjı']/Degerleme_2['Tahmini PD/NS'])*Degerleme_2['Fiyat']
+    Degerleme_2['Degerleme 7'] = Degerleme_2['Degerleme 7'].apply(lambda x: round(x, 2))
 
-#Değerleme 1 = Hisse_Fiyatıx(Sektör_FK/Şirket_FK) ve Hisse_Fiyatıx(Sektör_PDDD/Şirket_PDDD) 'nin ortalaması
-Tum_Carpanlar['Degerleme 1']=(Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR F/K']/Tum_Carpanlar['F/K'])+Tum_Carpanlar['Fiyat']*(Tum_Carpanlar['SEKTÖR PD/DD']/Tum_Carpanlar['PD/DD']))/2
-Tum_Carpanlar['Degerleme 1'] = Tum_Carpanlar['Degerleme 1'].apply(lambda x: round(x, 2))
+    #Model 8 = Hisse_Fiyatı/(Sirket_PDDD)*Sektör_PDDD ve Hisse_Fiyatı/(Sirket_PDDD)*Bist_PDDD
+    Degerleme_1['Degerleme 8'] = (Degerleme_1['Fiyat']/Degerleme_1['Cari PD/DD'])*Degerleme_1['Sektör PD/DD']+(Degerleme_1['Fiyat']/Degerleme_1['Cari PD/DD']*Degerleme_1['BIST PD/DD'])/2
+    Degerleme_1['Degerleme 8'] = Degerleme_1['Degerleme 8'].apply(lambda x: round(x, 2))
 
-Tum_Carpanlar_2['Degerleme 1']=(Tum_Carpanlar_2['Fiyat']*(Tum_Carpanlar_2['SEKTÖR F/K']/Tum_Carpanlar_2['F/K'])+Tum_Carpanlar_2['Fiyat']*(Tum_Carpanlar_2['SEKTÖR PD/DD']/Tum_Carpanlar_2['PD/DD']))/2
-Tum_Carpanlar_2['Degerleme 1'] = Tum_Carpanlar_2['Degerleme 1'].apply(lambda x: round(x, 2))
+    Degerleme_2['Degerleme 8'] = (Degerleme_2['Fiyat']/Degerleme_2['Cari PD/DD'])*Degerleme_2['Sektör PD/DD']+(Degerleme_2['Fiyat']/Degerleme_2['Cari PD/DD']*Degerleme_2['BIST PD/DD'])/2
+    Degerleme_2['Degerleme 8'] = Degerleme_2['Degerleme 8'].apply(lambda x: round(x, 2))
 
-#Değerleme 2 = (Hisse Fiyatı/Şirket_FK)xSektör_FK ve (Hisse Fiyatı/Şirket_FK)xBist_FK 'nın ortalaması
-Tum_Carpanlar['Degerleme 2']=((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['SEKTÖR F/K']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['BIST F/K'])/2
-Tum_Carpanlar['Degerleme 2'] = Tum_Carpanlar['Degerleme 2'].apply(lambda x: round(x, 2))
+    #Model 9 = Hisse_Fiyatı/(Şirket_FK)*Tarihsel_FK
+    Degerleme_1['Degerleme 9'] =  (Degerleme_1['Fiyat']/Degerleme_1['Cari F/K'])*Degerleme_1['Tarihsel F/K']
+    Degerleme_1['Degerleme 9'] = Degerleme_1['Degerleme 9'].apply(lambda x: round(x, 2))
 
-Tum_Carpanlar_2['Degerleme 2']=((Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['F/K'])*Tum_Carpanlar_2['SEKTÖR F/K']+(Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['F/K'])*Tum_Carpanlar_2['BIST F/K'])/2
-Tum_Carpanlar_2['Degerleme 2'] = Tum_Carpanlar_2['Degerleme 2'].apply(lambda x: round(x, 2))
+    Degerleme_2['Degerleme 9'] =  (Degerleme_2['Fiyat']/Degerleme_2['Cari F/K'])*Degerleme_2['Tarihsel F/K']
+    Degerleme_2['Degerleme 9'] = Degerleme_2['Degerleme 9'].apply(lambda x: round(x, 2))
 
-#Değerleme 3 = Gelecek_FK=(Piyasa Değeri / Yıllıklandırılmış Net Kâr) olmak üzere  (Hisse Fiyatı/Gelecek FK)xBist_FK ve (Hisse Fiyatı/Gelecek FK)xSektör_FK 'nın ortalaması
-Tum_Carpanlar['Degerleme 3']=((Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'])*Tum_Carpanlar['SEKTÖR F/K']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['GELECEK FK'])*Tum_Carpanlar['BIST F/K'])/2
-Tum_Carpanlar['Degerleme 3'] = Tum_Carpanlar['Degerleme 3'].apply(lambda x: round(x, 2))
+    #Model 10 = Öz Sermayenin 3 yada 4 katı kadar piyasa değeri olması
+    Degerleme_1['Degerleme 10'] = ((3*Degerleme_1['Piyasa Değeri'])/Degerleme_1['Cari PD/DD'])/Degerleme_1['Ödenmiş Sermaye']
+    Degerleme_1['Degerleme 10'] = Degerleme_1['Degerleme 10'].apply(lambda x: round(x, 2))
 
-Tum_Carpanlar_2['Degerleme 3']=((Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['TAHMİNİ GELECEK FK'])*Tum_Carpanlar_2['SEKTÖR F/K']+(Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['TAHMİNİ GELECEK FK'])*Tum_Carpanlar_2['BIST F/K'])/2
-Tum_Carpanlar_2['Degerleme 3'] = Tum_Carpanlar_2['Degerleme 3'].apply(lambda x: round(x, 2))
+    Degerleme_2['Degerleme 10'] = ((3*Degerleme_2['Piyasa Değeri'])/Degerleme_2['Cari PD/DD'])/Degerleme_2['Ödenmiş Sermaye']
+    Degerleme_2['Degerleme 10'] = Degerleme_2['Degerleme 10'].apply(lambda x: round(x, 2))
 
-#Değerleme 4 = Şirket Sermayesi Kadar Kâr Elde Ederse 10 TL değeri vardır.
-Tum_Carpanlar['Degerleme 4']=(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Ödenmiş Sermaye'])*10
-Tum_Carpanlar['Degerleme 4'] = Tum_Carpanlar['Degerleme 4'].apply(lambda x: round(x, 2))
+    Degerleme_1['İçsel Değer']=Degerleme_1[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1,skipna=True)
+    Degerleme_1['İçsel Değer'] = Degerleme_1['İçsel Değer'].apply(lambda x: round(x, 2))
+    Degerleme_1['Marj']=((Degerleme_1['İçsel Değer']-Degerleme_1['Fiyat'])/(Degerleme_1['Fiyat']+0.001))*100
+    Degerleme_1['Marj'] = Degerleme_1['Marj'].apply(lambda x: round(x, 2))
+    Degerleme_1=Degerleme_1.T
 
-Tum_Carpanlar_2['Degerleme 4']=(Tum_Carpanlar_2['TAHMİNİ YILLIK KAR']/Tum_Carpanlar_2['Ödenmiş Sermaye'])*10
-Tum_Carpanlar_2['Degerleme 4'] = Tum_Carpanlar_2['Degerleme 4'].apply(lambda x: round(x, 2))
+    Degerleme_2['İçsel Değer']=Degerleme_2[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1,skipna=True)
+    Degerleme_2['İçsel Değer'] = Degerleme_2['İçsel Değer'].apply(lambda x: round(x, 2))
+    Degerleme_2['Marj']=((Degerleme_2['İçsel Değer']-Degerleme_2['Fiyat'])/(Degerleme_2['Fiyat']+0.001))*100
+    Degerleme_2['Marj'] = Degerleme_2['Marj'].apply(lambda x: round(x, 2))
+    Degerleme_2=Degerleme_2.T
 
-#Değerleme 5 = PD/DD Öz Sermayenin 10 Katı olmalı. (Öz Sermaye Kârlılığı x10/(PD/DD))xHisse_Fiyatı
-Tum_Carpanlar['Degerleme 5']=(10*(Tum_Carpanlar['YILLIK KAR']/Tum_Carpanlar['Öz Sermaye'])/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['Fiyat']
-Tum_Carpanlar['Degerleme 5'] = Tum_Carpanlar['Degerleme 5'].apply(lambda x: round(x, 2))
+    return Degerleme_1, Degerleme_2
 
-Tum_Carpanlar_2['Degerleme 5']=(10*(Tum_Carpanlar_2['TAHMİNİ YILLIK KAR']/Tum_Carpanlar_2['Öz Sermaye'])/Tum_Carpanlar_2['PD/DD'])*Tum_Carpanlar_2['Fiyat']
-Tum_Carpanlar_2['Degerleme 5'] = Tum_Carpanlar_2['Degerleme 5'].apply(lambda x: round(x, 2))
-
-#Değerleme 6 = Potansiyel PD/Özsermaye
-Tum_Carpanlar['Degerleme 6']=Tum_Carpanlar['POTASİYEL PD']/Tum_Carpanlar['Ödenmiş Sermaye']
-Tum_Carpanlar['Degerleme 6'] = Tum_Carpanlar['Degerleme 6'].apply(lambda x: round(x, 2))
-
-Tum_Carpanlar_2['Degerleme 6']=Tum_Carpanlar_2['TAHMİNİ POTASİYEL PD']/Tum_Carpanlar_2['Ödenmiş Sermaye']
-Tum_Carpanlar_2['Degerleme 6'] = Tum_Carpanlar_2['Degerleme 6'].apply(lambda x: round(x, 2))
-
-#Değerleme 7 = 100*(Net Kar Marjı / PD_NS )*Hisse_Fiyatı
-Tum_Carpanlar['Degerleme 7']=10*(Tum_Carpanlar['NET KAR MARJI']/Tum_Carpanlar['PD/NS'])*Tum_Carpanlar['Fiyat']
-Tum_Carpanlar['Degerleme 7'] = Tum_Carpanlar['Degerleme 7'].apply(lambda x: round(x, 2))
-
-Tum_Carpanlar_2['Degerleme 7']=10*(Tum_Carpanlar_2['TAHMİNİ NET KAR MARJI']/Tum_Carpanlar_2['TAHMİNİ PD/NS'])*Tum_Carpanlar_2['Fiyat']
-Tum_Carpanlar_2['Degerleme 7'] = Tum_Carpanlar_2['Degerleme 7'].apply(lambda x: round(x, 2))
-
-
-#Değerleme 8 = Hisse_Fiyatı/(Sirket_PDDD)*Sektör_PDDD ve Hisse_Fiyatı/(Sirket_PDDD)*Bist_PDDD
-Tum_Carpanlar['Degerleme 8']=(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['PD/DD'])*Tum_Carpanlar['SEKTÖR PD/DD']+(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['PD/DD']*Tum_Carpanlar['BIST PD/DD'])/2
-Tum_Carpanlar['Degerleme 8'] = Tum_Carpanlar['Degerleme 8'].apply(lambda x: round(x, 2))
-
-Tum_Carpanlar_2['Degerleme 8']=(Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['PD/DD'])*Tum_Carpanlar_2['SEKTÖR PD/DD']+(Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['PD/DD']*Tum_Carpanlar_2['BIST PD/DD'])/2
-Tum_Carpanlar_2['Degerleme 8'] = Tum_Carpanlar_2['Degerleme 8'].apply(lambda x: round(x, 2))
-
-#Değerleme 9 = Hisse_Fİyatı/(Şirket_FK)*Tarihsel_FK
-Tum_Carpanlar['Degerleme 9']=(Tum_Carpanlar['Fiyat']/Tum_Carpanlar['F/K'])*Tum_Carpanlar['Tarihsel F/K']
-Tum_Carpanlar['Degerleme 9'] = Tum_Carpanlar['Degerleme 9'].apply(lambda x: round(x, 2))
-
-Tum_Carpanlar_2['Degerleme 9']=(Tum_Carpanlar_2['Fiyat']/Tum_Carpanlar_2['F/K'])*Tum_Carpanlar_2['Tarihsel F/K']
-Tum_Carpanlar_2['Degerleme 9'] = Tum_Carpanlar_2['Degerleme 9'].apply(lambda x: round(x, 2))
-
-#Değerleme 10 =Öz Sermayenin 3 yada 4 katı kadar piyasa değeri olması
-Tum_Carpanlar['Degerleme 10']=((3*Tum_Carpanlar['Piyasa Değeri'])/Tum_Carpanlar['PD/DD'])/Tum_Carpanlar['Ödenmiş Sermaye']
-Tum_Carpanlar['Degerleme 10'] = Tum_Carpanlar['Degerleme 10'].apply(lambda x: round(x, 2))
-
-Tum_Carpanlar_2['Degerleme 10']=((3*Tum_Carpanlar_2['Piyasa Değeri'])/Tum_Carpanlar_2['PD/DD'])/Tum_Carpanlar_2['Ödenmiş Sermaye']
-Tum_Carpanlar_2['Degerleme 10'] = Tum_Carpanlar_2['Degerleme 10'].apply(lambda x: round(x, 2))
-
-Tum_Carpanlar['İçsel Değer']=Tum_Carpanlar[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1,skipna=True)
-Tum_Carpanlar['İçsel Değer'] = Tum_Carpanlar['İçsel Değer'].apply(lambda x: round(x, 2))
-Tum_Carpanlar['Marj']=((Tum_Carpanlar['İçsel Değer']-Tum_Carpanlar['Fiyat'])/(Tum_Carpanlar['Fiyat']+0.001))*100
-Tum_Carpanlar['Marj'] = Tum_Carpanlar['Marj'].apply(lambda x: round(x, 2))
-Tum_Carpanlar=Tum_Carpanlar.T
-
-Tum_Carpanlar_2['İçsel Değer']=Tum_Carpanlar_2[['Degerleme 1', 'Degerleme 2','Degerleme 3','Degerleme 4','Degerleme 5','Degerleme 6','Degerleme 7','Degerleme 8','Degerleme 9','Degerleme 10']].mean(axis=1,skipna=True)
-Tum_Carpanlar_2['İçsel Değer'] = Tum_Carpanlar_2['İçsel Değer'].apply(lambda x: round(x, 2))
-Tum_Carpanlar_2['Marj']=((Tum_Carpanlar_2['İçsel Değer']-Tum_Carpanlar_2['Fiyat'])/(Tum_Carpanlar_2['Fiyat']+0.001))*100
-Tum_Carpanlar_2['Marj'] = Tum_Carpanlar_2['Marj'].apply(lambda x: round(x, 2))
-Tum_Carpanlar_2=Tum_Carpanlar_2.T
-print(Tum_Carpanlar_2)
+Degerleme_1,Degerleme_2 = Degerleme(Hisse_Adı[0])
 col1, col2 = st.columns(2)
 with col1:
     st.subheader('Yıllıklandırılmış Verilere Göre')
-    st.dataframe(Tum_Carpanlar,use_container_width=True,height=1500)
+    st.dataframe(Degerleme_1,use_container_width=True,height=1500)
 with col2:
    st.subheader('Tahmini Yıl Sonu Verilerine Göre')
-   st.dataframe(Tum_Carpanlar_2,use_container_width=True,height=1500)
+   st.dataframe(Degerleme_2,use_container_width=True,height=1500)
