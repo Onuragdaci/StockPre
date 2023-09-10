@@ -614,7 +614,7 @@ Sapmalar_2=Hisse_Ozet_Ceyrek.tail(3).drop(['Yıllar'],axis=1)
 Sapmalar_2=Sapmalar_2.head(2)
 Ortalama_2=Sapmalar_2.head(1)
 
-st.header('Hisse ' +str(Hisse_Adı[0])+' Dönem: '+str(BlcDnm)+' Temel Analiz Değerlendirmesi')
+st.header(str(Hisse_Adı[0])+' Dönem: '+str(BlcDnm)+' Temel Analiz Değerlendirmesi')
 st.header('Hisse Karnesi')
 col1, col2 , col3= st.columns(3)
 with col1:
