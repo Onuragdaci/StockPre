@@ -343,7 +343,7 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
         
     r1=requests.get(url1,params=Parametreler,verify=False).json()["value"]                  #JSON formatında Sayfa Verisine Ulaş
     Borcluluk=pd.DataFrame.from_dict(r1)                                                    #Sayfa Verisini Oku
-    Borcluluk = Borcluluk.drop(Borcluluk.columns[[0,2,3,4,5]],axis = 1)                     #Sayfa Verisini Ayıkla  
+    Borcluluk = Borcluluk.drop(Borcluluk.columns[[0,2,4,5,6]],axis = 1)                     #Sayfa Verisini Ayıkla  
     
     Borcluluk.columns.values[0] = Hisse                                                      #Ana Verinin Başlıklarını Yeniden İsimlendir
     Borcluluk.columns.values[1] = 'Son Veri'                                                 #Ana Verinin Başlıklarını Yeniden İsimlendir
