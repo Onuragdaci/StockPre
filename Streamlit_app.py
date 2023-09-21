@@ -253,8 +253,38 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
               'Yıllık Brüt Kâr Marjı Değişimi',
               'Yıllık FAVÖK Marjı Değişimi',
               'Yıllık Net Marjı Değişimi']
-   
-    Karlılık=[Hisse,C_BurKarMarj,C_FavKarMarj,C_NetKarMarj,Y_BurKarMarj,Y_FavKarMarj,Y_NetKarMarj] 
+
+
+    if C_BurKarMarj>0:
+       Check_1='Pozitif'
+    else:
+       Check_1='Negatif'
+
+    if C_FavKarMarj>0:
+       Check_2='Pozitif'
+    else:
+       Check_2='Negatif'
+
+    if C_NetKarMarj>0:
+       Check_3='Pozitif'
+    else:
+       Check_3='Negatif' 
+
+    if Y_BurKarMarj>0:
+       Check_4='Pozitif'
+    else:
+       Check_4='Negatif' 
+
+    if Y_FavKarMarj>0:
+       Check_5='Pozitif'
+    else:
+       Check_5='Negatif'  
+
+    if Y_NetKarMarj>0:
+       Check_6='Pozitif'
+    else:
+       Check_6='Negatif' 
+    Karlılık=[Hisse,Check_1,Check_2,Check_3,Check_4,Check_5,Check_6] 
     count_1 = len([i for i in Karlılık[1::] if float(i) > 0])
     Karlılık=pd.DataFrame([Karlılık],columns=Karlılık_Basliklar)
     Karlılık=Karlılık.T
@@ -308,8 +338,38 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
               'Satışlar Yıllık Değişim',
               'FAVÖK Yıllık  Değişim',
               'Net Kâr Yıllık Değişim']
-   
-    Büyüme=[Hisse,C_NetSatDeg,C_FAVOKDeg,C_NetKarDeg,Y_NetSatDeg,Y_FAVOKDeg,Y_NetKarDeg] 
+
+    if C_NetSatDeg>0:
+       Check_1='Pozitif'
+    else:
+       Check_1='Negatif'
+
+    if C_FAVOKDeg>0:
+       Check_2='Pozitif'
+    else:
+       Check_2='Negatif'
+
+    if C_NetKarDeg>0:
+       Check_3='Pozitif'
+    else:
+       Check_3='Negatif' 
+
+    if Y_NetSatDeg>0:
+       Check_4='Pozitif'
+    else:
+       Check_4='Negatif' 
+
+    if Y_FAVOKDeg>0:
+       Check_5='Pozitif'
+    else:
+       Check_5='Negatif'  
+
+    if Y_NetKarDeg>0:
+       Check_6='Pozitif'
+    else:
+       Check_6='Negatif'
+
+    Büyüme=[Hisse,Check_1,Check_2,Check_3,Check_4,Check_5,Check_6] 
     count_2 = len([i for i in Büyüme[1::] if float(i) > 0])
     Büyüme=pd.DataFrame([Büyüme],columns=Büyüme_Basliklar)
     Büyüme=Büyüme.T
