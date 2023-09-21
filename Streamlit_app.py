@@ -285,7 +285,6 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
     else:
        Check_6='Negatif' 
     Karlılık=[Hisse,Check_1,Check_2,Check_3,Check_4,Check_5,Check_6] 
-    count_1 = len([i for i in Karlılık[1::] if float(i) > 0])
     Karlılık=pd.DataFrame([Karlılık],columns=Karlılık_Basliklar)
     Karlılık=Karlılık.T
       
@@ -370,7 +369,6 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
        Check_6='Negatif'
 
     Büyüme=[Hisse,Check_1,Check_2,Check_3,Check_4,Check_5,Check_6] 
-    count_2 = len([i for i in Büyüme[1::] if float(i) > 0])
     Büyüme=pd.DataFrame([Büyüme],columns=Büyüme_Basliklar)
     Büyüme=Büyüme.T
 
@@ -478,10 +476,9 @@ def Hisse_Karne(Hisse,Finansallar,Karlılık,BlcDnm):
               'Net Finansal Gider < FAVÖK /5']
     
     Borcluluk=[Hisse,Check_1,Check_2,Check_3,Check_4,Check_5,Check_6] 
-    count_3 = len([i for i in Borcluluk[1::] if str(i) == 'Pozitif'])
     Borcluluk=pd.DataFrame([Borcluluk],columns=Borcluluk_Basliklar)
     Borcluluk=Borcluluk.T
-    return Karlılık, Büyüme, Borcluluk,count_1, count_2,count_3
+    return Karlılık, Büyüme, Borcluluk
 
 def Degerleme(Temel_Veriler_1,Temel_Veriler_2):
     Degerleme_1=Temel_Veriler_1
@@ -650,7 +647,7 @@ def cooling_highlight_2(val):
     return f'background-color: {color}'
 
 Temel_Veriler_1, Temel_Veriler_2, Finansallar, Karlılık, BlcDnm=Hisse_Temel_Veriler(Hisse_Adı[0])
-Karlılık, Büyüme, Borcluluk, count_1, count_2, count_3=Hisse_Karne(Hisse_Adı[0],Finansallar,Karlılık,BlcDnm)
+Karlılık, Büyüme, Borcluluk,=Hisse_Karne(Hisse_Adı[0],Finansallar,Karlılık,BlcDnm)
 Degerleme_1, Degerleme_2 =Degerleme(Temel_Veriler_1,Temel_Veriler_2)
 Hisse_Ozet_Aylık,Hisse_Ozet_Ceyrek=Hisse_Tarihsel(Hisse_Adı[0])
 
@@ -689,15 +686,15 @@ with col2:
 st.header('Hisse Karnesi')
 col1, col2 , col3= st.columns(3)
 with col1:
-    st.subheader('Karlılık '+ str(count_1)+'/6')
+    st.subheader('Karlılık')
     st.dataframe(Karlılık.style.applymap(cooling_highlight_1,subset=[Hisse_Adı[0]]),use_container_width=True)
 
 with col2:
-   st.subheader('Büyüme '+ str(count_2)+'/6')
+   st.subheader('Büyüme')
    st.dataframe(Büyüme.style.applymap(cooling_highlight_1,subset=[Hisse_Adı[0]]),use_container_width=True)
 
 with col3:
-   st.subheader('Borçluluk '+ str(count_3)+'/6')
+   st.subheader('Borçluluk')
    st.dataframe(Borcluluk.style.applymap(cooling_highlight_2,subset=[Hisse_Adı[0]]),use_container_width=True)   
 
 
