@@ -586,9 +586,7 @@ def Hisse_Tarihsel(Hisse):
     Temmuz = list(Hisse[Hisse.index.month == 7]['Yüzde'])[::-1]
     Agustos = list(Hisse[Hisse.index.month == 8]['Yüzde'])[::-1]
     Eylül = list(Hisse[Hisse.index.month == 9]['Yüzde'])[::-1]
-    Eylül.insert(0, np.nan)
     Ekim = list(Hisse[Hisse.index.month == 10]['Yüzde'])[::-1]
-    Ekim.insert(0, np.nan)
     Kasım = list(Hisse[Hisse.index.month == 11]['Yüzde'])[::-1]
     Kasım.insert(0, np.nan)
     Aralık = list(Hisse[Hisse.index.month == 12]['Yüzde'])[::-1]
