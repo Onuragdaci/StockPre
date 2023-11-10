@@ -533,10 +533,10 @@ def Degerleme(Temel_Veriler_1,Temel_Veriler_2):
     Degerleme_2['Degerleme 7'] = Degerleme_2['Degerleme 7'].apply(lambda x: round(x, 2))
 
     #Model 8 = Hisse_Fiyatı/(Sirket_PDDD)*Sektör_PDDD ve Hisse_Fiyatı/(Sirket_PDDD)*Bist_PDDD
-    Degerleme_1['Degerleme 8'] = (Degerleme_1['Fiyat']/Degerleme_1['Cari PD/DD'])*Degerleme_1['Sektör PD/DD']+(Degerleme_1['Fiyat']/Degerleme_1['Cari PD/DD']*Degerleme_1['BIST PD/DD'])/2
+    Degerleme_1['Degerleme 8'] = ((Degerleme_1['Fiyat']/Degerleme_1['Cari PD/DD'])*Degerleme_1['Sektör PD/DD']+(Degerleme_1['Fiyat']/Degerleme_1['Cari PD/DD']*Degerleme_1['BIST PD/DD']))/2
     Degerleme_1['Degerleme 8'] = Degerleme_1['Degerleme 8'].apply(lambda x: round(x, 2))
 
-    Degerleme_2['Degerleme 8'] = (Degerleme_2['Fiyat']/Degerleme_2['Cari PD/DD'])*Degerleme_2['Sektör PD/DD']+(Degerleme_2['Fiyat']/Degerleme_2['Cari PD/DD']*Degerleme_2['BIST PD/DD'])/2
+    Degerleme_2['Degerleme 8'] = ((Degerleme_2['Fiyat']/Degerleme_2['Cari PD/DD'])*Degerleme_2['Sektör PD/DD']+(Degerleme_2['Fiyat']/Degerleme_2['Cari PD/DD']*Degerleme_2['BIST PD/DD']))/2
     Degerleme_2['Degerleme 8'] = Degerleme_2['Degerleme 8'].apply(lambda x: round(x, 2))
 
     #Model 9 = Hisse_Fiyatı/(Şirket_FK)*Tarihsel_FK
