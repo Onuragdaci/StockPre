@@ -5,7 +5,7 @@ numpy==1.26.4
 pandas==2.2.0
 plotly==5.19.0
 selenium==4.17.2
-urllib3==2.2.1
+urllib3==1.26.18
 webdriver-manager
 streamlit==1.31.1
 seleniumbase==4.23.5
